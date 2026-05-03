@@ -2,66 +2,74 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Command } from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { Settings, Moon, Sun, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
-import LanguageSwitcher from "./language-switcher";
+import { cn } from "@/lib/utils";
 
 const navigationItems = [
-  { key: "home", href: "/" },
-  { key: "recent", href: "/recent" },
-  { key: "video", href: "/video" },
+  { label: "Home", href: "/" },
+  { label: "Read Quran", href: "/surah" },
+  { label: "Prayer Time", href: "/prayer-time" },
+  { label: "Ramadan 2026", href: "/ramadan" },
 ];
 
+import { SettingsPanel } from "./settings-panel";
+
 export function Navbar() {
-
-  const t = useTranslations("navLinks");
-  const tAuth = useTranslations("auth");
-
-  console.log("Intl navigation links: ", t("home"))
+  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2">
-            <Command className="h-6 w-6" />
-            <span className="font-bold">PRIME TV</span>
+    <header className="sticky top-0 z-40 h-20 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="flex h-full items-center justify-between px-8">
+        <div className="flex items-center gap-10">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
+               <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-7 w-7 text-white"
+              >
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                <path d="M8 7h6" />
+                <path d="M8 11h8" />
+              </svg>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-tight text-foreground">Quran Mazid</span>
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest leading-none">
+                Read, Study, and Learn The Quran
+              </span>
+            </div>
           </Link>
 
-          <nav className="hidden md:flex">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {navigationItems.map((item) => (
-                  <NavigationMenuItem key={item.key}>
-                    <NavigationMenuLink
-                      asChild
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      <Link href={item.href}>{t(item.key)}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
+          <nav className="hidden lg:flex items-center gap-1">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher />
-          <Button variant="ghost" asChild>
-            <Link href="/auth/login">{tAuth("signIn")}</Link>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
           </Button>
-          <Button asChild>
-            <Link href="/auth/signup">{tAuth("signUp")}</Link>
-          </Button>
+          
+          <SettingsPanel />
         </div>
       </div>
     </header>
