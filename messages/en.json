@@ -1,0 +1,110 @@
+{
+  "navLinks": {
+    "home": "Home",
+    "recent": "Recent",
+    "video": "Video"
+  },
+  "auth": {
+    "signIn": "Log In",
+    "signOut": "Log Out",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "welcomeBack": "Welcome back!",
+    "donthaveAcc": "Don't Have an Account?",
+    "register": "Register",
+    "forgotPassword": "Forgot Password?",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "registration": "Registration",
+    "fullName": "Full Name",
+    "enterFullName": "Enter your full name",
+    "createPassword": "Create a password"
+  },
+  "notFound": {
+    "title": "Whoops! Looks Like This Page Went on Vacation!",
+    "description": "Uh oh! Our little cartoon friends might have accidentally scribbled out this address. We can't seem to find the page you're looking for.",
+    "button": "Return to Base Camp"
+  },
+  "footer": {
+    "brandName": "Prime Tv",
+    "description": "The ultimate boilerplate for building high-performance Next.js applications with style.",
+    "newsletter": {
+      "title": "Subscribe to our newsletter",
+      "placeholder": "Enter your email",
+      "button": "Join"
+    },
+    "sections": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "product": [
+        {
+          "name": "Features",
+          "href": "/#features"
+        },
+        {
+          "name": "Pricing",
+          "href": "/pricing"
+        },
+        {
+          "name": "Documentation",
+          "href": "/docs"
+        },
+        {
+          "name": "Guides",
+          "href": "/guides"
+        }
+      ],
+      "company": [
+        {
+          "name": "About",
+          "href": "/about"
+        },
+        {
+          "name": "Blog",
+          "href": "/blog"
+        },
+        {
+          "name": "Careers",
+          "href": "/careers"
+        },
+        {
+          "name": "Contact",
+          "href": "/contact"
+        }
+      ],
+      "legal": [
+        {
+          "name": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "name": "Terms",
+          "href": "/terms"
+        },
+        {
+          "name": "Cookie Policy",
+          "href": "/cookies"
+        }
+      ]
+    },
+    "copyright": "© {year} Prime Tv Inc. All rights reserved. Built with ❤️ by the community.",
+    "social": [
+      {
+        "name": "Twitter",
+        "href": "https://twitter.com"
+      },
+      {
+        "name": "GitHub",
+        "href": "https://github.com"
+      },
+      {
+        "name": "YouTube",
+        "href": "https://youtube.com"
+      }
+    ]
+  }
+}

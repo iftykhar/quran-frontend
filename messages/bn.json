@@ -1,0 +1,111 @@
+{
+  "navLinks": {
+    "home": "হোম",
+    "recent": "সাম্প্রতিক",
+    "video": "ভিডিও"
+  },
+  "auth": {
+    "signIn": "লগ ইন",
+    "signOut": "লগ আউট",
+    "signUp": "সাইন আপ",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "welcomeBack": "স্বাগতম!",
+    "donthaveAcc": "অ্যাকাউন্ট নেই?",
+    "register": "রেজিস্টার করুন",
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+    "enterEmail": "ইমেইল লিখুন",
+    "enterPassword": "পাসওয়ার্ড লিখুন",
+    "registration": "রেজিস্ট্রেশন",
+    "fullName": "পুরো নাম",
+    "enterFullName": "পুরো নাম লিখুন",
+    "createPassword": "পাসওয়ার্ড তৈরি করুন",
+    "haveAcc": "অ্যাকাউন্ট আছে? লগ ইন করুন"
+  },
+  "notFound": {
+    "title": "উপস! মনে হচ্ছে এই পেজটা ছুটিতে গেছে!",
+    "description": "ওহ হো! আমাদের ছোট কার্টুন বন্ধুরা হয়তো ভুলক্রমে এই ঠিকানাটি মুছে ফেলেছে। আমরা খুঁজে পাচ্ছি না আপনি যে পেজটি খুঁজছেন।",
+    "button": "বেইস ক্যাম্পে ফিরে যান"
+  },
+  "footer": {
+    "brandName": "প্রাইম টিভি",
+    "description": "স্টাইলিশ এবং পারফরম্যান্ট Next.js অ্যাপ্লিকেশন তৈরির জন্য সেরা বয়লারপ্লেট।",
+    "newsletter": {
+      "title": "আমাদের নিউজলেটারে সাবস্ক্রাইব করুন",
+      "placeholder": "ইমেইল লিখুন",
+      "button": "যোগ দিন"
+    },
+    "sections": {
+      "product": "প্রোডাক্ট",
+      "company": "কোম্পানি",
+      "legal": "আইনগত"
+    },
+    "links": {
+      "product": [
+        {
+          "name": "ফিচারস",
+          "href": "/#features"
+        },
+        {
+          "name": "প্রাইসিং",
+          "href": "/pricing"
+        },
+        {
+          "name": "ডকুমেন্টেশন",
+          "href": "/docs"
+        },
+        {
+          "name": "গাইডস",
+          "href": "/guides"
+        }
+      ],
+      "company": [
+        {
+          "name": "আমাদের সম্পর্কে",
+          "href": "/about"
+        },
+        {
+          "name": "ব্লগ",
+          "href": "/blog"
+        },
+        {
+          "name": "ক্যারিয়ারস",
+          "href": "/careers"
+        },
+        {
+          "name": "যোগাযোগ",
+          "href": "/contact"
+        }
+      ],
+      "legal": [
+        {
+          "name": "প্রাইভেসি",
+          "href": "/privacy"
+        },
+        {
+          "name": "টার্মস",
+          "href": "/terms"
+        },
+        {
+          "name": "কুকি পলিসি",
+          "href": "/cookies"
+        }
+      ]
+    },
+    "copyright": "© {year} প্রাইম টিভি, সর্বস্বত্ব সংরক্ষিত। সম্প্রদায় দ্বারা নির্মিত ❤️",
+    "social": [
+      {
+        "name": "টুইটার",
+        "href": "https://twitter.com"
+      },
+      {
+        "name": "গিটহাব",
+        "href": "https://github.com"
+      },
+      {
+        "name": "ইউটিউব",
+        "href": "https://youtube.com"
+      }
+    ]
+  }
+}
