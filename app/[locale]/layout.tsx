@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import AppProvider from "@/provider/app-provider";
 import { Toaster } from "sonner";
+import { GlobalModals } from "@/components/shared/global-modals";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <AppProvider>
         {children}
+        <GlobalModals />
         <Toaster position="top-right" richColors />
       </AppProvider>
     </NextIntlClientProvider>

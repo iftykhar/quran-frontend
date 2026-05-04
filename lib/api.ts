@@ -87,6 +87,32 @@ export async function getPageById(id: string, page: number = 1, limit: number = 
 }
 
 /**
+ * Fetches search results for text across all surahs.
+ */
+export async function textSearch(query: string): Promise<any[]> {
+  try {
+    const response = await api.get<ApiResponse<any[]>>(`/search?q=${encodeURIComponent(query)}`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error searching text:", error);
+    return [];
+  }
+}
+
+/**
+ * Fetches navigation suggestions (surahs, juz, pages).
+ */
+export async function navigationSearch(query: string): Promise<any[]> {
+  try {
+    const response = await api.get<ApiResponse<any[]>>(`/navigation?q=${encodeURIComponent(query)}`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error searching navigation:", error);
+    return [];
+  }
+}
+
+/**
  * Fetches the list of all 30 Juz.
  */
 export async function getJuzList(): Promise<any[]> {

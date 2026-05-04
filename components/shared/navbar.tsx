@@ -2,15 +2,15 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Settings, Moon, Sun, ChevronDown, Menu } from "lucide-react";
+import { Settings, Moon, Sun, ChevronDown, Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navigationItems = [
   { label: "Home", href: "/" },
   { label: "Read Quran", href: "/surah" },
-  { label: "Prayer Time", href: "/prayer-time" },
-  { label: "Ramadan 2026", href: "/ramadan" },
+  // { label: "Prayer Time", href: "/prayer-time" },
+  // { label: "Ramadan 2026", href: "/ramadan" },
 ];
 
 import { SettingsPanel } from "./settings-panel";
@@ -38,20 +38,12 @@ export function Navbar() {
           </Button>
 
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
-               <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-7 w-7 text-white"
-              >
-                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                <path d="M8 7h6" />
-                <path d="M8 11h8" />
-              </svg>
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-transparent">
+              <img 
+                src="/images/logo.png" 
+                alt="Quran Mazid" 
+                className="h-11 w-11 object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-foreground">Quran Mazid</span>
@@ -75,6 +67,15 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
+            onClick={() => window.dispatchEvent(new CustomEvent("toggle-search-modal"))}
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+
           <Button
             variant="ghost"
             size="icon"
