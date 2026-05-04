@@ -145,18 +145,33 @@ export function SurahSidebar() {
     <>
       {/* Sidebar Container */}
       <div className={cn(
-        "fixed left-20 top-20 flex h-[calc(100vh-80px)] w-80 flex-col border-r border-border bg-[#0F0F0F] transition-transform duration-300 z-40",
-        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        "fixed top-0 lg:top-20 flex h-full lg:h-[calc(100vh-80px)] w-full lg:w-80 flex-col border-r border-border bg-[#0F0F0F] transition-transform duration-300 z-[60] lg:z-40",
+        isOpen 
+          ? "translate-x-0" 
+          : "-translate-x-full lg:translate-x-0 lg:left-30"
       )}>
         {/* Backdrop for mobile */}
         {isOpen && (
           <div 
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden -z-10 translate-x-80" 
+            className="fixed inset-0 bg-black/80 backdrop-blur-md lg:hidden -z-10 w-screen h-screen" 
             onClick={() => setIsOpen(false)}
           />
         )}
 
         <div className="p-6 space-y-6">
+          {/* Mobile Close Button */}
+          <div className="flex items-center justify-between lg:hidden mb-2">
+            <h2 className="text-xl font-bold text-foreground">Menu</h2>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsOpen(false)}
+              className="rounded-xl bg-[#1A1A1A] border border-[#2A2A2A]"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
           {/* Tab Switcher - Pill Style */}
           <div className="flex p-1.5 bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A]">
             {["surah", "juz", "page"].map((tab) => (

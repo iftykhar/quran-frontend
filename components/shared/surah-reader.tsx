@@ -67,23 +67,30 @@ export function SurahReader({ initialData, id }: SurahReaderProps) {
   return (
     <div className="p-8 max-w-5xl mx-auto">
       {/* Surah Header */}
-      <div className="mb-10 text-center space-y-4">
-        <div className="inline-block px-6 py-2 rounded-full bg-primary/10 text-primary font-bold text-sm">
+      <div className="mb-14 text-center space-y-6">
+        <div className="inline-block px-8 py-3 rounded-full bg-[#132313] text-primary font-bold text-sm tracking-wide border border-primary/20 shadow-lg">
           Surah {surah?.eng_name}
         </div>
-        <h1 className="font-quran text-5xl text-foreground">
-          {surah?.sura_name}
-        </h1>
-        <div className="flex items-center justify-center gap-6 text-muted-foreground text-sm font-medium">
-          <span>{surah?.meaning}</span>
-          <span className="h-1 w-1 rounded-full bg-muted-foreground" />
+        
+        <div className="space-y-2">
+          <h1 className="font-quran text-6xl text-foreground leading-tight">
+            {surah?.sura_name}
+          </h1>
+          {/* <p className="text-muted-foreground text-sm font-medium tracking-wide uppercase">
+            Ayah-{surah?.total_ayat}, {surah?.revelation_place}
+          </p> */}
+        </div>
+
+        <div className="flex items-center justify-center gap-4 text-[#8BA1B3] text-xs font-bold uppercase tracking-widest">
+          <span>{surah?.revelation_place}</span>
+          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
           <span>{surah?.total_ayat} Verses</span>
-          <span className="h-1 w-1 rounded-full bg-muted-foreground" />
+          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
           <span>Para {surah?.para}</span>
         </div>
         
         <div className="flex justify-center pt-4">
-          <div className="h-[1px] w-40 bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="h-[1px] w-64 bg-gradient-to-r from-transparent via-border/50 to-transparent" />
         </div>
       </div>
 
