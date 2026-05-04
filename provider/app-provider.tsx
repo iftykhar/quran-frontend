@@ -7,6 +7,8 @@ import { useLocale } from "next-intl";
 import { Navbar } from "@/components/shared/navbar";
 import { IconSidebar } from "@/components/shared/icon-sidebar";
 import { AudioPlayer } from "@/components/shared/audio-player";
+import { SurahSidebar } from "@/components/surah/surah-sidebar";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 interface SettingsContextType {
@@ -27,6 +29,8 @@ interface SettingsContextType {
   audioRef: React.RefObject<HTMLAudioElement | null>;
   theme: "dark" | "light";
   setTheme: (theme: "dark" | "light") => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -50,6 +54,7 @@ export default function AppProvider({
   const [translationFontSize, setTranslationFontSize] = useState(16);
   const [activeFontFamily, setActiveFontFamily] = useState("KFGQPC Uthman Taha Naskh");
   const [theme, setThemeState] = useState<"dark" | "light">("dark");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const setTheme = (newTheme: "dark" | "light") => {
     setThemeState(newTheme);
@@ -60,6 +65,13 @@ export default function AppProvider({
       document.documentElement.classList.remove("light");
     }
   };
+
+  // Listen for the custom event from the navbar for backward compatibility
+  useEffect(() => {
+    const handleToggle = () => setIsSidebarOpen(prev => !prev);
+    window.addEventListener('toggle-sidebar', handleToggle);
+    return () => window.removeEventListener('toggle-sidebar', handleToggle);
+  }, []);
 
   // Global Audio State
   const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
@@ -197,6 +209,8 @@ export default function AppProvider({
           audioRef,
           theme,
           setTheme,
+          isSidebarOpen,
+          setIsSidebarOpen,
         }}
       >
         <div className="flex min-h-screen bg-background">
@@ -208,6 +222,16 @@ export default function AppProvider({
             </main>
           </div>
           <AudioPlayer />
+          
+          {/* Global Mobile/Tablet Sidebar Drawer */}
+          <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+            <SheetContent side="left" className="p-0 w-80 bg-[#0F0F0F] border-r border-white/5">
+              <div className="sr-only">
+                <SheetTitle>Navigation Menu</SheetTitle>
+              </div>
+              <SurahSidebar isMobile={true} className="border-none" />
+            </SheetContent>
+          </Sheet>
         </div>
       </SettingsContext.Provider>
     </QueryClientProvider>

@@ -10,6 +10,8 @@ import { useParams, usePathname } from "next/navigation";
 import { getSurahs, getJuzList, getPageList } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
+import { useSettings } from "@/provider/app-provider";
+
 interface SidebarItemProps {
   number: number;
   title: string;
@@ -94,10 +96,10 @@ function SidebarSkeleton() {
   );
 }
 
-export function SurahSidebar() {
+export function SurahSidebar({ className, isMobile = false }: { className?: string; isMobile?: boolean }) {
   const [activeTab, setActiveTab] = useState<"surah" | "juz" | "page">("surah");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const { isSidebarOpen, setIsSidebarOpen } = useSettings();
   const params = useParams();
   const pathname = usePathname();
   
@@ -154,42 +156,38 @@ export function SurahSidebar() {
     return [];
   }, [activeTab, searchQuery, surahs, juzList, pageList]);
 
-  useEffect(() => {
-    const handleToggle = () => setIsOpen(prev => !prev);
-    window.addEventListener('toggle-sidebar', handleToggle);
-    return () => window.removeEventListener('toggle-sidebar', handleToggle);
-  }, []);
-
   return (
     <>
       {/* Sidebar Container */}
       <div className={cn(
-        "fixed top-0 lg:top-20 flex h-full lg:h-[calc(100vh-80px)] w-full lg:w-80 flex-col border-r border-border bg-[#0F0F0F] transition-transform duration-300 z-[60] lg:z-40",
-        isOpen 
-          ? "translate-x-0" 
-          : "-translate-x-full lg:translate-x-0 lg:left-30"
+        "flex flex-col bg-[#0F0F0F]",
+        !isMobile ? "fixed top-0 lg:top-20 h-full lg:h-[calc(100vh-80px)] w-full lg:w-80 border-r border-border transition-transform duration-300 z-[60] lg:z-40" : "h-full w-full",
+        !isMobile && (isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:left-30"),
+        className
       )}>
-        {/* Backdrop for mobile */}
-        {isOpen && (
+        {/* Backdrop for mobile (Only for the non-isMobile version) */}
+        {!isMobile && isSidebarOpen && (
           <div 
             className="fixed inset-0 bg-black/80 backdrop-blur-md lg:hidden -z-10 w-screen h-screen" 
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsSidebarOpen(false)}
           />
         )}
 
         <div className="p-6 space-y-6">
-          {/* Mobile Close Button */}
-          <div className="flex items-center justify-between lg:hidden mb-2">
-            <h2 className="text-xl font-bold text-foreground">Menu</h2>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsOpen(false)}
-              className="rounded-xl bg-[#1A1A1A] border border-[#2A2A2A]"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
+          {/* Mobile Close Button (Only for the non-isMobile version) */}
+          {!isMobile && (
+            <div className="flex items-center justify-between lg:hidden mb-2">
+              <h2 className="text-xl font-bold text-foreground">Menu</h2>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSidebarOpen(false)}
+                className="rounded-xl bg-[#1A1A1A] border border-[#2A2A2A]"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
 
           {/* Tab Switcher - Pill Style */}
           <div className="flex p-1.5 bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A]">
@@ -242,7 +240,7 @@ export function SurahSidebar() {
                     arabicName={surah.sura_name}
                     isActive={isSurahRoute && currentId === surah.sura_no}
                     href={`/surah/${surah.sura_no}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setIsSidebarOpen(false)}
                   />
                 );
               }
@@ -255,7 +253,7 @@ export function SurahSidebar() {
                     subtitle={`${item.first_surah_name} & More • ${item.surah_count} Surahs`}
                     isActive={isJuzRoute && currentId === item.juz_no}
                     href={`/juz/${item.juz_no}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setIsSidebarOpen(false)}
                   />
                 );
               }
@@ -267,7 +265,7 @@ export function SurahSidebar() {
                   subtitle={item.surahs?.join(' \u2022 ') || 'Quran Madani Mushaf'}
                   isActive={isPageRoute && currentId === item.page_no}
                   href={`/page/${item.page_no}`}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsSidebarOpen(false)}
                 />
               );
             })

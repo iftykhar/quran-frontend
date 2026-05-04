@@ -74,7 +74,93 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
     setAyahs(initialData.ayahs);
     setPage(1);
     setHasMore(initialData.ayahs.length >= 20);
-  }, [id, initialData]);
+
+    // Handle Jump to Ayah from Hash
+    const handleInitialJump = async () => {
+      const hash = window.location.hash;
+      if (hash.startsWith("#ayah-")) {
+        const ayahNo = parseInt(hash.replace("#ayah-", ""));
+        
+        // If the ayah is beyond current loaded set
+        if (ayahNo > initialData.ayahs.length) {
+          setIsLoadingMore(true);
+          const targetPage = Math.ceil(ayahNo / 20);
+          
+          const fetchPromises = [];
+          for (let p = 2; p <= targetPage; p++) {
+            fetchPromises.push(fetcher(p));
+          }
+          
+          const results = await Promise.all(fetchPromises);
+          const extraAyahs = results.flatMap(r => r?.ayahs || []);
+          
+          setAyahs(prev => [...prev, ...extraAyahs]);
+          setPage(targetPage);
+          if (results.length > 0 && (results[results.length - 1]?.ayahs?.length || 0) < 20) {
+            setHasMore(false);
+          }
+          setIsLoadingMore(false);
+          
+          // Wait for DOM to update then scroll
+          setTimeout(() => {
+            const el = document.getElementById(`ayah-${ayahNo}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 500);
+        } else {
+          // It's in the first page, just scroll
+          setTimeout(() => {
+            const el = document.getElementById(`ayah-${ayahNo}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 500);
+        }
+      }
+    };
+
+    handleInitialJump();
+  }, [id, initialData, fetcher]);
+
+  // Handle Hash Changes (In-page jumps)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith("#ayah-")) {
+        const ayahNo = parseInt(hash.replace("#ayah-", ""));
+        const el = document.getElementById(`ayah-${ayahNo}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (hasMore) {
+          // If the element doesn't exist yet, we might need to load more
+          // This is a backup for in-page navigation to unloaded content
+          const triggerJump = async () => {
+             const targetPage = Math.ceil(ayahNo / 20);
+             if (targetPage > page) {
+               setIsLoadingMore(true);
+               const fetchPromises = [];
+               for (let p = page + 1; p <= targetPage; p++) {
+                 fetchPromises.push(fetcher(p));
+               }
+               const results = await Promise.all(fetchPromises);
+               const extraAyahs = results.flatMap(r => r?.ayahs || []);
+               setAyahs(prev => [...prev, ...extraAyahs]);
+               setPage(targetPage);
+               if (results.length > 0 && (results[results.length - 1]?.ayahs?.length || 0) < 20) {
+                 setHasMore(false);
+               }
+               setIsLoadingMore(false);
+               setTimeout(() => {
+                 const newEl = document.getElementById(`ayah-${ayahNo}`);
+                 if (newEl) newEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+               }, 500);
+             }
+          };
+          triggerJump();
+        }
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [ayahs, page, hasMore, fetcher]);
 
   const currentPageNo = parseInt(id, 10);
 

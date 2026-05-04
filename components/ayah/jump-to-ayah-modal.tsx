@@ -40,7 +40,7 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
       <div className="relative w-full max-w-lg bg-[#0F0F0F] border border-[#1F1F1F] rounded-[32px] shadow-2xl overflow-hidden">
         <div className="p-8 space-y-8">
           <div className="flex items-center justify-center relative">
-            <h2 className="text-xl font-bold text-foreground">Jump to Ayah/Tafsir</h2>
+            <h2 className="text-xl font-bold text-foreground">Jump to Ayah</h2>
             <button onClick={onClose} className="absolute right-0 p-2 hover:bg-[#1A1A1A] rounded-full transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
             </button>
@@ -91,12 +91,12 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
 
         {/* Footer Buttons */}
         <div className="flex h-20">
-          <button 
+          {/* <button 
             onClick={() => handleJump("tafsir")}
             className="flex-1 bg-[#1A1A1A] hover:bg-[#222222] text-foreground font-bold text-sm transition-all border-r border-[#1F1F1F]"
           >
             Jump To Tafsir
-          </button>
+          </button> */}
           <button 
             onClick={() => handleJump("ayah")}
             className="flex-1 bg-[#2E4A2E] hover:bg-[#3A5A3A] text-[#4ADE80] font-bold text-sm transition-all"

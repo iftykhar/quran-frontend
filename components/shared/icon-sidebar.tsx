@@ -25,7 +25,13 @@ export function IconSidebar() {
 
       <nav className="flex flex-row flex-1 items-center justify-center w-full lg:flex-col lg:gap-8 lg:justify-center lg:w-auto">
         {navItems.map((item) => {
-          const isActive = item.href ? (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))) : false;
+          // Handle locale prefix in pathname (e.g., /en/surah -> /surah)
+          const normalizedPathname = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/") || "/";
+          const isActive = item.href ? (
+            item.href === "/" 
+              ? normalizedPathname === "/" 
+              : normalizedPathname.startsWith(item.href)
+          ) : false;
           const isButton = !item.href;
 
           const content = (
@@ -42,7 +48,9 @@ export function IconSidebar() {
 
           const className = cn(
             "group relative flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300",
-            isActive ? "text-primary bg-primary/10 lg:bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
+            isActive 
+              ? "text-primary bg-primary/10 shadow-[0_0_20px_rgba(34,197,94,0.15)] ring-1 ring-primary/20" 
+              : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
           );
 
           if (isButton) {
