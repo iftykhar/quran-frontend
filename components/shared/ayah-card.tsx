@@ -17,7 +17,7 @@ interface AyahCardProps {
 }
 
 export function AyahCard({ ayah, settings }: AyahCardProps) {
-  const { playingAyahKey, isPlaying, playAyah } = useSettings();
+  const { playingAyahKey, isPlaying, playAyah, addBookmark, removeBookmark, isBookmarked } = useSettings();
   const [isLoading, setIsLoading] = useState(false);
   
   const ayahKey = `${ayah.sura_no}:${ayah.ayah_no}`;
@@ -77,8 +77,23 @@ export function AyahCard({ ayah, settings }: AyahCardProps) {
             )}
           </Button>
           
-          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/5">
-            <Bookmark className="h-5 w-5" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={cn(
+              "h-10 w-10 rounded-full transition-all",
+              isBookmarked(`${ayah.sura_no}:${ayah.ayah_no}`) ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+            )}
+            onClick={() => {
+              const key = `${ayah.sura_no}:${ayah.ayah_no}`;
+              if (isBookmarked(key)) {
+                removeBookmark(key);
+              } else {
+                addBookmark(ayah);
+              }
+            }}
+          >
+            <Bookmark className={cn("h-5 w-5", isBookmarked(`${ayah.sura_no}:${ayah.ayah_no}`) && "fill-current")} />
           </Button>
           
           <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/5">

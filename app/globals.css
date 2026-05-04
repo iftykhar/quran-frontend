@@ -47,7 +47,23 @@
 
 @font-face {
   font-family: "KFGQPC Uthman Taha Naskh";
-  src: url("/fonts/KFGQPC Uthman Taha Naskh Regular/KFGQPC Uthman Taha Naskh Regular.ttf") format("truetype");
+  src: url("./public/fonts/KFGQPC Uthman Taha Naskh Regular/KFGQPC Uthman Taha Naskh Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/Amiri-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Scheherazade New";
+  src: url("/fonts/ScheherazadeNew-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

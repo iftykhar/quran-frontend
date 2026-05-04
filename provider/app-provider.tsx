@@ -18,6 +18,10 @@ interface SettingsContextType {
   isPlaying: boolean;
   playAyah: (key: string, url: string) => void;
   stopAyah: () => void;
+  bookmarks: any[];
+  addBookmark: (ayah: any) => void;
+  removeBookmark: (key: string) => void;
+  isBookmarked: (key: string) => boolean;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -92,15 +96,35 @@ export default function AppProvider({
     audio.onplay = () => setIsPlaying(true);
   };
 
+  // Bookmarks State
+  const [bookmarks, setBookmarks] = useState<any[]>([]);
+
+  const addBookmark = (ayah: any) => {
+    const key = `${ayah.sura_no}:${ayah.ayah_no}`;
+    if (!isBookmarked(key)) {
+      setBookmarks((prev) => [...prev, { ...ayah, id: key }]);
+    }
+  };
+
+  const removeBookmark = (key: string) => {
+    setBookmarks((prev) => prev.filter((b) => `${b.sura_no}:${b.ayah_no}` !== key));
+  };
+
+  const isBookmarked = (key: string) => {
+    return bookmarks.some((b) => `${b.sura_no}:${b.ayah_no}` === key);
+  };
+
   // Load from localStorage
   useEffect(() => {
     const savedArabicSize = localStorage.getItem("arabicFontSize");
     const savedTranslationSize = localStorage.getItem("translationFontSize");
     const savedFontFamily = localStorage.getItem("activeFontFamily");
+    const savedBookmarks = localStorage.getItem("quran_bookmarks");
 
     if (savedArabicSize) setArabicFontSize(parseInt(savedArabicSize));
     if (savedTranslationSize) setTranslationFontSize(parseInt(savedTranslationSize));
     if (savedFontFamily) setActiveFontFamily(savedFontFamily);
+    if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
   }, []);
 
   // Save to localStorage
@@ -108,7 +132,8 @@ export default function AppProvider({
     localStorage.setItem("arabicFontSize", arabicFontSize.toString());
     localStorage.setItem("translationFontSize", translationFontSize.toString());
     localStorage.setItem("activeFontFamily", activeFontFamily);
-  }, [arabicFontSize, translationFontSize, activeFontFamily]);
+    localStorage.setItem("quran_bookmarks", JSON.stringify(bookmarks));
+  }, [arabicFontSize, translationFontSize, activeFontFamily, bookmarks]);
 
   const pathname = usePathname();
   const currentLocale = useLocale();
@@ -129,6 +154,10 @@ export default function AppProvider({
           isPlaying,
           playAyah,
           stopAyah,
+          bookmarks,
+          addBookmark,
+          removeBookmark,
+          isBookmarked,
         }}
       >
         <div className="flex min-h-screen bg-background">
