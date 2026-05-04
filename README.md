@@ -5,6 +5,8 @@ The frontend for a high-fidelity Quran study application built with **Next.js 15
 ## Live Demo
 - **Frontend**: [https://quranmajid.vercel.app/en](https://quranmajid.vercel.app/en)
 
+- **video Link**: [https://drive.google.com/file/d/1rLKETaR6u7hwM9whMFYr9i4c1o22TKOc/view?usp=sharing](https://drive.google.com/file/d/1rLKETaR6u7hwM9whMFYr9i4c1o22TKOc/view?usp=sharing)
+
 ---
 
 ## Tech Stack
