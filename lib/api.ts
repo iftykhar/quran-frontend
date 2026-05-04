@@ -20,6 +20,20 @@ export interface SurahData {
   ayahs: Ayah[];
 }
 
+export interface JuzData {
+  juz: {
+    juz_no: number;
+    surah_count: number;
+    first_surah_name: string;
+  };
+  ayahs: Ayah[];
+}
+
+export interface PageData {
+  page_no: number;
+  ayahs: Ayah[];
+}
+
 /**
  * Fetches the list of all surahs from the database.
  */
@@ -42,6 +56,32 @@ export async function getSurahById(id: string, page: number = 1, limit: number =
     return response.data.data;
   } catch (error) {
     console.error(`Error fetching surah ${id} page ${page}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Fetches a specific Juz by its ID, including ayahs.
+ */
+export async function getJuzById(id: string, page: number = 1, limit: number = 20): Promise<JuzData | null> {
+  try {
+    const response = await api.get<ApiResponse<JuzData>>(`/juz/${id}?page=${page}&limit=${limit}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`Error fetching juz ${id}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Fetches a specific Page by its ID, including ayahs.
+ */
+export async function getPageById(id: string, page: number = 1, limit: number = 20): Promise<PageData | null> {
+  try {
+    const response = await api.get<ApiResponse<PageData>>(`/page/${id}?page=${page}&limit=${limit}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`Error fetching page ${id}:`, error);
     return null;
   }
 }
