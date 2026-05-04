@@ -3,13 +3,11 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Surah } from "@/types/quran";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
-const API_BASE_URL = "http://localhost:5000/api/v1/quran";
+import { getSurahs } from "@/lib/api";
 
 export function SurahSidebar() {
   const [activeTab, setActiveTab] = useState<"surah" | "juz" | "page">("surah");
@@ -19,10 +17,7 @@ export function SurahSidebar() {
 
   const { data: surahs, isLoading } = useQuery({
     queryKey: ["surahs"],
-    queryFn: async () => {
-      const response = await axios.get(`${API_BASE_URL}/surahs`);
-      return response.data.data as Surah[];
-    },
+    queryFn: getSurahs,
   });
 
   const filteredSurahs = surahs?.filter(
