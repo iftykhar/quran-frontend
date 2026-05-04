@@ -25,6 +25,8 @@ interface SettingsContextType {
   removeBookmark: (key: string) => void;
   isBookmarked: (key: string) => boolean;
   audioRef: React.RefObject<HTMLAudioElement | null>;
+  theme: "dark" | "light";
+  setTheme: (theme: "dark" | "light") => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -47,6 +49,17 @@ export default function AppProvider({
   const [arabicFontSize, setArabicFontSize] = useState(24);
   const [translationFontSize, setTranslationFontSize] = useState(16);
   const [activeFontFamily, setActiveFontFamily] = useState("KFGQPC Uthman Taha Naskh");
+  const [theme, setThemeState] = useState<"dark" | "light">("dark");
+
+  const setTheme = (newTheme: "dark" | "light") => {
+    setThemeState(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  };
 
   // Global Audio State
   const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
@@ -123,11 +136,31 @@ export default function AppProvider({
     const savedTranslationSize = localStorage.getItem("translationFontSize");
     const savedFontFamily = localStorage.getItem("activeFontFamily");
     const savedBookmarks = localStorage.getItem("quran_bookmarks");
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
 
-    if (savedArabicSize) setArabicFontSize(parseInt(savedArabicSize));
-    if (savedTranslationSize) setTranslationFontSize(parseInt(savedTranslationSize));
+    // Mobile Detection
+    const isMobile = window.innerWidth < 768;
+
+    if (savedArabicSize) {
+      setArabicFontSize(parseInt(savedArabicSize));
+    } else if (isMobile) {
+      setArabicFontSize(20); // Smaller default for mobile
+    }
+
+    if (savedTranslationSize) {
+      setTranslationFontSize(parseInt(savedTranslationSize));
+    } else if (isMobile) {
+      setTranslationFontSize(14); // Smaller default for mobile
+    }
+
     if (savedFontFamily) setActiveFontFamily(savedFontFamily);
     if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
+    
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      setTheme("dark"); // Default
+    }
   }, []);
 
   // Save to localStorage
@@ -162,6 +195,8 @@ export default function AppProvider({
           removeBookmark,
           isBookmarked,
           audioRef,
+          theme,
+          setTheme,
         }}
       >
         <div className="flex min-h-screen bg-background">

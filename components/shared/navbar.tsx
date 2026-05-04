@@ -14,9 +14,10 @@ const navigationItems = [
 ];
 
 import { SettingsPanel } from "../settings/settings-panel";
+import { useSettings } from "@/provider/app-provider";
 
 export function Navbar() {
-  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
+  const { theme, setTheme } = useSettings();
 
   return (
     <header className="sticky top-0 z-40 h-20 w-full border-b border-border bg-background/80 backdrop-blur-md">

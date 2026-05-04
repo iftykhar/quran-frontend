@@ -11,9 +11,9 @@ The frontend for a high-fidelity Quran study application built with **Next.js 15
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
-- **State Management**: React Context API + TanStack Query
-- **Internationalization**: `next-intl`
-- **UI Components**: Shadcn UI / Radix UI
+- **State Management**: React Context API 
+<!-- - **Internationalization**: `next-intl` -->
+<!-- - **UI Components**: Shadcn UI / Radix UI -->
 
 ---
 
@@ -27,7 +27,7 @@ The frontend for a high-fidelity Quran study application built with **Next.js 15
 
 ---
 
-##  Installation
+## Installation
 
 1. Install dependencies:
    ```bash
