@@ -20,7 +20,15 @@ export function IconSidebar() {
   return (
     <aside className="fixed bottom-0 left-0 z-50 flex h-16 w-full flex-row items-center justify-around border-t border-border bg-background/80 backdrop-blur-md px-6 lg:left-0 lg:top-0 lg:h-screen lg:w-20 lg:flex-col lg:justify-center lg:border-r lg:border-t-0 lg:bg-card lg:py-6 lg:px-0">
       <div className="hidden lg:flex">
-        
+        <Link href="/">
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-transparent">
+              <img 
+                src="/images/logo.png" 
+                alt="Quran Mazid" 
+                className="h-11 w-11 object-contain"
+              />
+            </div>
+        </Link>
       </div>
 
       <nav className="flex flex-row flex-1 items-center justify-center w-full lg:flex-col lg:gap-8 lg:justify-center lg:w-auto">

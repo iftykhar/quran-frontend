@@ -21,35 +21,32 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 h-20 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="flex h-full items-center justify-between px-6 lg:px-8">
-        <div className="flex items-center gap-4 lg:gap-10">
+      <div className="flex h-full items-center justify-between px-3 md:px-6 lg:px-8">
+        <div className="flex items-center gap-2 lg:gap-10">
           {/* Hamburger for Sidebar */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-10 w-10 rounded-xl bg-muted/50 text-muted-foreground hover:text-primary"
+            className="lg:hidden h-9 w-9 md:h-10 md:w-10 rounded-xl bg-muted/50 text-muted-foreground hover:text-primary"
             onClick={() => {
-              // We need a way to trigger the sidebar. 
-              // Since it's a separate component, I'll use a custom event for now 
-              // or just assume the user will implement a global state.
               window.dispatchEvent(new CustomEvent('toggle-sidebar'));
             }}
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5 md:h-6 md:w-6" />
           </Button>
 
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-transparent">
+          <Link href="/" className="flex items-center gap-1.5 lg:gap-3">
+            <div className="flex h-8 w-8 lg:h-11 lg:w-11 items-center justify-center overflow-hidden rounded-xl bg-transparent">
               <img 
                 src="/images/logo.png" 
                 alt="Quran Mazid" 
-                className="h-11 w-11 object-contain"
+                className="h-8 w-8 lg:h-11 lg:w-11 object-contain"
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-foreground">Quran Mazid</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest leading-none">
-                Read, Study, and Learn The Quran
+              <span className="text-base lg:text-xl font-bold tracking-tight text-foreground truncate">Quran Mazid</span>
+              <span className="hidden md:block text-[10px] font-medium text-muted-foreground uppercase tracking-widest leading-none">
+                The Noble Quran
               </span>
             </div>
           </Link>
@@ -67,23 +64,23 @@ export function Navbar() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1.5 md:gap-4">
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
+            className="h-9 w-9 md:h-10 md:w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
             onClick={() => window.dispatchEvent(new CustomEvent("toggle-search-modal"))}
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
 
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
+            className="h-9 w-9 md:h-10 md:w-10 rounded-full bg-muted/50 text-muted-foreground hover:text-primary"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
-            {theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            {theme === "dark" ? <Moon className="h-4 w-4 md:h-5 md:w-5" /> : <Sun className="h-4 w-4 md:h-5 md:w-5" />}
           </Button>
           
           <SettingsPanel />

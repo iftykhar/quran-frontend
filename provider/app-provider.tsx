@@ -252,7 +252,7 @@ export default function AppProvider({
           
           {/* Global Mobile/Tablet Sidebar Drawer */}
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-            <SheetContent side="left" className="p-0 w-80 bg-[#0F0F0F] border-r border-white/5">
+            <SheetContent side="left" className="p-0 w-80 bg-card border-r border-border">
               <div className="sr-only">
                 <SheetTitle>Navigation Menu</SheetTitle>
               </div>

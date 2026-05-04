@@ -21,6 +21,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const [results, setResults] = useState<SearchResult[]>([]);
   const [recentNav, setRecentNav] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // Load recent navigation from localStorage
   useEffect(() => {
@@ -71,11 +72,15 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   const handleSelect = (item: any) => {
     addToRecent(item);
-    onClose();
-    if (item.type === "surah") router.push(`/surah/${item.id}`);
-    if (item.type === "juz") router.push(`/juz/${item.id}`);
-    if (item.type === "page") router.push(`/page/${item.id}`);
-    if (item.type === "ayah") router.push(`/surah/${item.surah_id}#ayah-${item.id}`);
+    setIsNavigating(true);
+
+    setTimeout(() => {
+      onClose();
+      if (item.type === "surah") router.push(`/surah/${item.id}`);
+      if (item.type === "juz") router.push(`/juz/${item.id}`);
+      if (item.type === "page") router.push(`/page/${item.id}`);
+      if (item.type === "ayah") router.push(`/surah/${item.surah_id}#ayah-${item.id}`);
+    }, 500);
   };
 
   if (!isOpen) return null;
@@ -86,9 +91,22 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-2xl bg-[#0F0F0F] border border-[#1F1F1F] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-2xl bg-card border border-border rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        {/* Navigation Loading Overlay */}
+        {isNavigating && (
+          <div className="absolute inset-0 z-50 bg-card/95 backdrop-blur-sm flex flex-col items-center justify-center gap-5 animate-in fade-in duration-300">
+            <div className="h-14 w-14 rounded-full border-4 border-primary border-t-transparent animate-spin shadow-lg shadow-primary/20" />
+            <div className="flex flex-col items-center gap-1.5">
+              <p className="text-lg font-bold text-foreground tracking-tight">Searching...</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black animate-pulse">
+                Loading selection...
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Search Header */}
-        <div className="flex items-center px-6 py-5 border-b border-[#1F1F1F]">
+        <div className="flex items-center px-6 py-5 border-b border-border">
           <Search className="h-5 w-5 text-muted-foreground mr-4" />
           <input
             autoFocus
@@ -100,8 +118,8 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/40"
           />
           <div className="flex items-center gap-3">
-            <div className="px-2 py-1 bg-[#1A1A1A] rounded-md text-[10px] text-muted-foreground font-mono">ESC</div>
-            <button onClick={onClose} className="p-1 hover:bg-[#1A1A1A] rounded-full transition-colors">
+            <div className="px-2 py-1 bg-muted rounded-md text-[10px] text-muted-foreground font-mono">ESC</div>
+            <button onClick={onClose} className="p-1 hover:bg-muted rounded-full transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
             </button>
           </div>
@@ -126,7 +144,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     <button
                       key={item.id + item.type}
                       onClick={() => handleSelect(item)}
-                      className="px-4 py-2 bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all"
+                      className="px-4 py-2 bg-muted border border-border rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all"
                     >
                       {item.title}
                     </button>
@@ -146,9 +164,9 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                       <button
                         key={i}
                         onClick={() => handleSelect(item)}
-                        className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-[#1A1A1A] transition-all group"
+                        className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-muted transition-all group"
                       >
-                        <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-[#1A1A1A] text-muted-foreground group-hover:text-primary">
+                        <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-muted text-muted-foreground group-hover:text-primary">
                           {item.type === "surah" && <Book className="h-4 w-4" />}
                           {item.type === "juz" && <Compass className="h-4 w-4" />}
                           {item.type === "page" && <Hash className="h-4 w-4" />}
@@ -174,9 +192,9 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 <button
                   key={i}
                   onClick={() => handleSelect(item)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-[#1A1A1A] transition-all group border border-transparent hover:border-[#2A2A2A]"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-muted transition-all group border border-transparent hover:border-border"
                 >
-                  <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-[#1A1A1A] text-muted-foreground group-hover:text-primary transition-colors">
+                  <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-muted text-muted-foreground group-hover:text-primary transition-colors">
                     {item.type === "surah" && <Book className="h-5 w-5" />}
                     {item.type === "juz" && <Compass className="h-5 w-5" />}
                     {item.type === "page" && <Hash className="h-5 w-5" />}
@@ -200,7 +218,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               {isLoading && results.length === 0 && (
                 <div className="py-20 flex flex-col items-center justify-center gap-4">
                   <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                  <p className="text-sm text-muted-foreground animate-pulse">Searching the heavens...</p>
+                  <p className="text-sm text-muted-foreground animate-pulse">Searching...</p>
                 </div>
               )}
 
@@ -214,13 +232,13 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-[#0A0A0A] border-t border-[#1F1F1F] flex items-center justify-between text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+        <div className="px-6 py-4 bg-background border-t border-border flex items-center justify-between text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
           <div className="flex gap-4">
             <span className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 bg-[#1F1F1F] rounded">↑↓</span> Navigate
+              <span className="px-1.5 py-0.5 bg-muted rounded">↑↓</span> Navigate
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 bg-[#1F1F1F] rounded">ENTER</span> Select
+              <span className="px-1.5 py-0.5 bg-muted rounded">ENTER</span> Select
             </span>
           </div>
           <p>Global Search v1.0</p>

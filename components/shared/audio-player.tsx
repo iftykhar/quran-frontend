@@ -171,7 +171,7 @@ export function AudioPlayer() {
                )} />
              </button>
            </div>
-           <p className="text-[10px] text-muted-foreground/40 font-medium italic">Read Study Learn...</p>
+           <p className="text-[10px] text-muted-foreground/40 font-medium italic">Al-Quran Al-Kareem</p>
         </div>
       </div>
     </div>

@@ -19,10 +19,10 @@ function ItemCard({ number, title, subtitle, arabicName, href }: ItemCardProps) 
   return (
     <Link
       href={href}
-      className="flex items-center gap-5 p-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] transition-all duration-300 hover:border-primary/40 hover:bg-[#111111] hover:scale-[1.02] hover:shadow-2xl group"
+      className="flex items-center gap-5 p-6 rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:bg-accent/10 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5 group"
     >
       <div className="relative flex h-12 w-12 shrink-0 items-center justify-center">
-        <div className="absolute inset-0 rotate-45 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] group-hover:border-primary/30 group-hover:rotate-[135deg] transition-all duration-500" />
+        <div className="absolute inset-0 rotate-45 rounded-xl bg-muted border border-border group-hover:border-primary/30 group-hover:rotate-[135deg] transition-all duration-500" />
         <span className="relative text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
           {number}
         </span>
@@ -50,13 +50,13 @@ function ItemCard({ number, title, subtitle, arabicName, href }: ItemCardProps) 
 
 function SkeletonCard() {
   return (
-    <div className="flex items-center gap-5 p-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] animate-pulse">
-      <div className="h-12 w-12 shrink-0 rotate-45 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A]" />
+    <div className="flex items-center gap-5 p-6 rounded-2xl border border-border bg-card animate-pulse">
+      <div className="h-12 w-12 shrink-0 rotate-45 rounded-xl bg-muted border border-border" />
       <div className="flex-1 space-y-2">
-        <div className="h-4 w-24 bg-[#1A1A1A] rounded" />
-        <div className="h-3 w-16 bg-[#1A1A1A] rounded" />
+        <div className="h-4 w-24 bg-muted rounded" />
+        <div className="h-3 w-16 bg-muted rounded" />
       </div>
-      <div className="h-8 w-16 bg-[#1A1A1A] rounded" />
+      <div className="h-8 w-16 bg-muted rounded" />
     </div>
   );
 }
@@ -104,7 +104,7 @@ export function SurahExplorer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <h1 className="text-4xl font-bold text-foreground tracking-tight">Explore Quran</h1>
           
-          <div className="flex p-1.5 bg-[#111111] rounded-2xl border border-[#222222]">
+          <div className="flex p-1.5 bg-muted rounded-2xl border border-border">
             {["surah", "juz", "page"].map((tab) => (
               <button
                 key={tab}
@@ -115,7 +115,7 @@ export function SurahExplorer() {
                 className={cn(
                   "px-8 py-2.5 text-sm font-bold capitalize rounded-xl transition-all duration-300",
                   activeTab === tab
-                    ? "bg-[#1A1A1A] text-foreground shadow-xl ring-1 ring-white/5"
+                    ? "bg-card text-foreground shadow-xl ring-1 ring-white/5"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -132,7 +132,7 @@ export function SurahExplorer() {
             placeholder={`Search ${activeTab}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-14 pl-16 pr-6 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl text-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
+            className="w-full h-14 pl-16 pr-6 bg-card border border-border rounded-2xl text-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
           />
         </div>
       </div>

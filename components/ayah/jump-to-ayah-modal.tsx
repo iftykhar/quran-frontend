@@ -13,6 +13,7 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
   const [selectedSurah, setSelectedSurah] = useState<Surah | null>(null);
   const [selectedAyah, setSelectedAyah] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isJumping, setIsJumping] = useState(false);
 
   useEffect(() => {
     async function loadSurahs() {
@@ -21,14 +22,21 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
       if (data.length > 0) setSelectedSurah(data[0]);
       setIsLoading(false);
     }
-    if (isOpen) loadSurahs();
+    if (isOpen) {
+      loadSurahs();
+      setIsJumping(false); // Reset when reopening
+    }
   }, [isOpen]);
 
   const handleJump = (type: "ayah" | "tafsir") => {
     if (!selectedSurah) return;
-    onClose();
-    // Navigation logic
-    router.push(`/surah/${selectedSurah.sura_no}#ayah-${selectedAyah}`);
+    setIsJumping(true);
+    
+    // Small delay to show the loading effect before navigation starts
+    setTimeout(() => {
+      onClose();
+      router.push(`/surah/${selectedSurah.sura_no}#ayah-${selectedAyah}`);
+    }, 600);
   };
 
   if (!isOpen) return null;
@@ -37,11 +45,24 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
     <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative w-full max-w-lg bg-[#0F0F0F] border border-[#1F1F1F] rounded-[32px] shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-lg bg-card border border-border rounded-[32px] shadow-2xl overflow-hidden">
+        {/* Loading Overlay */}
+        {isJumping && (
+          <div className="absolute inset-0 z-50 bg-card/95 backdrop-blur-sm flex flex-col items-center justify-center gap-5 animate-in fade-in duration-300">
+            <div className="h-14 w-14 rounded-full border-4 border-primary border-t-transparent animate-spin shadow-[0_0_20px_rgba(var(--primary),0.3)]" />
+            <div className="flex flex-col items-center gap-1.5">
+              <p className="text-lg font-bold text-foreground tracking-tight">Loading Verse</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black animate-pulse">
+                Loading {selectedSurah?.eng_name} : Ayah {selectedAyah}
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="p-8 space-y-8">
           <div className="flex items-center justify-center relative">
             <h2 className="text-xl font-bold text-foreground">Jump to Ayah</h2>
-            <button onClick={onClose} className="absolute right-0 p-2 hover:bg-[#1A1A1A] rounded-full transition-colors">
+            <button onClick={onClose} className="absolute right-0 p-2 hover:bg-muted rounded-full transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
             </button>
           </div>
@@ -52,7 +73,7 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               <label className="text-sm font-bold text-muted-foreground ml-1">Select Surah</label>
               <div className="relative group">
                 <select 
-                  className="w-full h-14 bg-[#111111] border border-[#1F1F1F] rounded-2xl px-6 appearance-none text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                  className="w-full h-14 bg-muted border border-border rounded-2xl px-6 appearance-none text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
                   value={selectedSurah?.sura_no || ""}
                   onChange={(e) => {
                     const s = surahs.find(surah => surah.sura_no === parseInt(e.target.value));
@@ -77,7 +98,7 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
                   min={1}
                   max={selectedSurah?.total_ayat || 1}
                   placeholder={selectedSurah ? `01 - ${selectedSurah.total_ayat}` : "Select a surah"}
-                  className="w-full h-14 bg-[#111111] border border-[#1F1F1F] rounded-2xl px-6 text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
+                  className="w-full h-14 bg-muted border border-border rounded-2xl px-6 text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
                   value={selectedAyah}
                   onChange={(e) => setSelectedAyah(parseInt(e.target.value) || 1)}
                 />
@@ -99,7 +120,7 @@ export function JumpToAyahModal({ isOpen, onClose }: { isOpen: boolean; onClose:
           </button> */}
           <button 
             onClick={() => handleJump("ayah")}
-            className="flex-1 bg-[#2E4A2E] hover:bg-[#3A5A3A] text-[#4ADE80] font-bold text-sm transition-all"
+            className="flex-1 bg-primary text-primary-foreground font-bold text-sm transition-all hover:opacity-90"
           >
             Jump To Ayah
           </button>

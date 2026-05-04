@@ -14,8 +14,8 @@ const hindSiliguri = Hind_Siliguri({
 });
 
 export const metadata: Metadata = {
-  title: "Quran Mazid - Read, Study, and Learn The Quran",
-  description: "A high-fidelity clone of QuranMazid.com built with Next.js 15.",
+  title: "Quran Mazid - The Noble Quran",
+  description: "Read and listen to the Noble Quran with premium audio and high-fidelity typography.",
 };
 
 export default function RootLayout({
