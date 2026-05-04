@@ -20,7 +20,10 @@ interface SettingsContextType {
   setActiveFontFamily: (family: string) => void;
   playingAyahKey: string | null;
   isPlaying: boolean;
+  playbackMode: "ayah" | "surah";
+  setPlaybackMode: (mode: "ayah" | "surah") => void;
   playAyah: (key: string, url: string) => void;
+  playFullSurah: (surahId: number, startAyah?: number) => void;
   stopAyah: () => void;
   bookmarks: any[];
   addBookmark: (ayah: any) => void;
@@ -76,6 +79,7 @@ export default function AppProvider({
   // Global Audio State
   const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackMode, setPlaybackMode] = useState<"ayah" | "surah">("ayah");
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const stopAyah = () => {
@@ -117,11 +121,31 @@ export default function AppProvider({
 
     audio.onended = () => {
       setIsPlaying(false);
-      setPlayingAyahKey(null);
+      
+      // If in surah mode, trigger next ayah
+      if (playbackMode === "surah" && playingAyahKey) {
+        const [surahId, ayahId] = playingAyahKey.split(":").map(Number);
+        // We trigger a global event so the QuranReader or a hook can handle fetching the next URL
+        window.dispatchEvent(new CustomEvent("play-next-ayah", { 
+          detail: { surahId, ayahId, key: playingAyahKey } 
+        }));
+      } else {
+        setPlayingAyahKey(null);
+      }
     };
 
     audio.onpause = () => setIsPlaying(false);
     audio.onplay = () => setIsPlaying(true);
+  };
+
+  const playFullSurah = (surahId: number, startAyah: number = 1) => {
+    setPlaybackMode("surah");
+    const key = `${surahId}:${startAyah}`;
+    // Construct URL for first ayah (using EveryAyah as standard for continuous)
+    const s = surahId.toString().padStart(3, '0');
+    const a = startAyah.toString().padStart(3, '0');
+    const url = `https://everyayah.com/data/Mishary_Rashid_Alafasy_24kbps/${s}${a}.mp3`;
+    playAyah(key, url);
   };
 
   // Bookmarks State
@@ -200,7 +224,10 @@ export default function AppProvider({
           setActiveFontFamily,
           playingAyahKey,
           isPlaying,
+          playbackMode,
+          setPlaybackMode,
           playAyah,
+          playFullSurah,
           stopAyah,
           bookmarks,
           addBookmark,

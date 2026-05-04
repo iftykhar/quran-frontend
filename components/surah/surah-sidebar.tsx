@@ -30,8 +30,8 @@ function SidebarItem({ number, title, subtitle, arabicName, isActive, href, onCl
       className={cn(
         "flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 group relative overflow-hidden",
         isActive
-          ? "bg-[#1E1E1E] border-[#2E2E2E] shadow-lg ring-1 ring-primary/20"
-          : "bg-transparent border-transparent hover:bg-[#1A1A1A] hover:border-[#2E2E2E]"
+          ? "bg-muted border-border shadow-lg ring-1 ring-primary/20"
+          : "bg-transparent border-transparent hover:bg-muted/50 hover:border-border"
       )}
     >
       {/* Active Indicator Glow */}
@@ -46,7 +46,7 @@ function SidebarItem({ number, title, subtitle, arabicName, isActive, href, onCl
             "absolute inset-0 rotate-45 rounded-lg transition-all duration-300",
             isActive 
               ? "bg-primary scale-110 shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
-              : "bg-[#2A2A2A] group-hover:bg-[#3A3A3A] group-hover:rotate-[135deg]"
+              : "bg-muted group-hover:bg-accent group-hover:rotate-[135deg]"
           )} 
         />
         <span className={cn(
@@ -85,13 +85,13 @@ function SidebarItem({ number, title, subtitle, arabicName, isActive, href, onCl
 
 function SidebarSkeleton() {
   return (
-    <div className="flex items-center gap-4 p-4 rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A]/50 animate-pulse">
-      <div className="h-10 w-10 shrink-0 rotate-45 rounded-lg bg-[#2A2A2A]" />
+    <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-muted/20 animate-pulse">
+      <div className="h-10 w-10 shrink-0 rotate-45 rounded-lg bg-muted" />
       <div className="flex-1 space-y-2">
-        <div className="h-4 w-24 bg-[#2A2A2A] rounded-md" />
-        <div className="h-2 w-16 bg-[#2A2A2A] rounded-md" />
+        <div className="h-4 w-24 bg-muted rounded-md" />
+        <div className="h-2 w-16 bg-muted rounded-md" />
       </div>
-      <div className="h-6 w-12 bg-[#2A2A2A] rounded-md" />
+      <div className="h-6 w-12 bg-muted rounded-md" />
     </div>
   );
 }
@@ -160,9 +160,9 @@ export function SurahSidebar({ className, isMobile = false }: { className?: stri
     <>
       {/* Sidebar Container */}
       <div className={cn(
-        "flex flex-col bg-[#0F0F0F]",
+        "flex flex-col bg-background",
         !isMobile ? "fixed top-0 lg:top-20 h-full lg:h-[calc(100vh-80px)] w-full lg:w-80 border-r border-border transition-transform duration-300 z-[60] lg:z-40" : "h-full w-full",
-        !isMobile && (isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:left-30"),
+        !isMobile && (isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:left-20"),
         className
       )}>
         {/* Backdrop for mobile (Only for the non-isMobile version) */}
@@ -182,7 +182,7 @@ export function SurahSidebar({ className, isMobile = false }: { className?: stri
                 variant="ghost" 
                 size="icon" 
                 onClick={() => setIsSidebarOpen(false)}
-                className="rounded-xl bg-[#1A1A1A] border border-[#2A2A2A]"
+                className="rounded-xl bg-muted border border-border"
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -190,7 +190,7 @@ export function SurahSidebar({ className, isMobile = false }: { className?: stri
           )}
 
           {/* Tab Switcher - Pill Style */}
-          <div className="flex p-1.5 bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A]">
+          <div className="flex p-1.5 bg-muted rounded-2xl border border-border">
             {["surah", "juz", "page"].map((tab) => (
               <button
                 key={tab}
@@ -201,7 +201,7 @@ export function SurahSidebar({ className, isMobile = false }: { className?: stri
                 className={cn(
                   "flex-1 py-2.5 text-xs font-bold capitalize rounded-xl transition-all duration-300",
                   activeTab === tab
-                    ? "bg-[#2A2A2A] text-foreground shadow-lg scale-105"
+                    ? "bg-card text-foreground shadow-lg scale-105"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -218,7 +218,7 @@ export function SurahSidebar({ className, isMobile = false }: { className?: stri
               placeholder={`Search ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-11 pr-4 bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+              className="w-full h-12 pl-11 pr-4 bg-muted border border-border rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/40"
             />
           </div>
         </div>

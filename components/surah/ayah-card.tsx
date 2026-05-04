@@ -54,7 +54,7 @@ export function AyahCard({ ayah, settings }: AyahCardProps) {
       {/* Left Column: Actions */}
       <div className="flex flex-col items-center gap-4 w-12 pt-2">
         <span className="text-primary font-bold text-lg whitespace-nowrap">
-          {ayah.sura_no}:{ayah.ayah_no}
+          {ayah.ayah_no === 0 ? "Bismillah" : `${ayah.sura_no}:${ayah.ayah_no}`}
         </span>
         
         <div className="flex flex-col gap-2">
@@ -117,8 +117,8 @@ export function AyahCard({ ayah, settings }: AyahCardProps) {
           }}
         >
           {ayah.arabic_text}
-          <span className="inline-flex items-center justify-center w-10 h-10 ml-4 rounded-full border border-primary/30 text-sm font-bold text-primary font-sans align-middle">
-            {ayah.ayah_no}
+          <span className="inline-flex items-center justify-center px-3 h-10 ml-4 rounded-full border border-primary/30 text-[10px] font-bold text-primary font-sans align-middle uppercase">
+            {ayah.ayah_no === 0 ? "Bismillah" : ayah.ayah_no}
           </span>
         </div>
 

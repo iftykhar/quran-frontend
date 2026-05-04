@@ -9,7 +9,7 @@ import { getSurahs } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export function AudioPlayer() {
-  const { playingAyahKey, isPlaying, playAyah, stopAyah, audioRef } = useSettings();
+  const { playingAyahKey, isPlaying, playAyah, stopAyah, audioRef, playbackMode, setPlaybackMode } = useSettings();
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("00:00");
   const [duration, setDuration] = useState("00:00");
@@ -78,11 +78,11 @@ export function AudioPlayer() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[100] bg-[#111111]/95 backdrop-blur-xl border-t border-white/5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom duration-500">
+    <div className="fixed bottom-0 left-0 right-0 z-[100] bg-card/95 backdrop-blur-xl border-t border-border shadow-[0_-10px_40px_rgba(0,0,0,0.2)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom duration-500">
       {/* Progress Bar Container - Smooth glide with CSS transitions */}
       <div 
         ref={progressBarRef}
-        className="absolute -top-0.5 left-0 right-0 h-1 bg-white/5 cursor-pointer group"
+        className="absolute -top-0.5 left-0 right-0 h-1 bg-muted cursor-pointer group"
         onClick={handleSeek}
       >
         <div 
@@ -103,7 +103,15 @@ export function AudioPlayer() {
             <span className="text-sm font-bold text-foreground truncate max-w-[180px]">
               {metadata.suraName} : {metadata.ayahNo}
             </span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Madani Mushaf</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Madani Mushaf</span>
+              <span className={cn(
+                "px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-tighter",
+                playbackMode === "surah" ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
+              )}>
+                {playbackMode} mode
+              </span>
+            </div>
           </div>
         </div>
 
@@ -113,22 +121,22 @@ export function AudioPlayer() {
             <span className="text-[10px] font-mono text-muted-foreground/60 w-10 text-right">{currentTime}</span>
             
             <div className="flex items-center gap-1 sm:gap-4">
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-white/5 transition-colors">
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-muted transition-colors">
                 <MoreHorizontal className="h-5 w-5" />
               </Button>
               
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-white/5 transition-colors">
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-muted transition-colors">
                 <SkipBack className="h-5 w-5" />
               </Button>
 
               <Button 
                 onClick={() => playingAyahKey && playAyah(playingAyahKey, "")}
-                className="h-12 w-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                className="h-12 w-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
               >
                 {isPlaying ? <Pause className="h-6 w-6 fill-current" /> : <Play className="h-6 w-6 fill-current ml-1" />}
               </Button>
 
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-white/5 transition-colors">
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground/80 hover:text-foreground hover:bg-muted transition-colors">
                 <SkipForward className="h-5 w-5" />
               </Button>
 
@@ -146,9 +154,24 @@ export function AudioPlayer() {
           </div>
         </div>
 
-        {/* Right Side: Status */}
-        <div className="hidden md:flex items-center justify-end gap-4 min-w-[150px] lg:min-w-[250px]">
-           <p className="text-[10px] text-muted-foreground/40 font-medium italic">Reading Study Learn...</p>
+        {/* Right Side: Status & Auto Play Toggle */}
+        <div className="hidden md:flex items-center justify-end gap-6 min-w-[150px] lg:min-w-[300px]">
+           <div className="flex items-center gap-3 bg-muted/50 px-4 py-2 rounded-2xl border border-border">
+             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Auto Play</span>
+             <button 
+               onClick={() => setPlaybackMode(playbackMode === "surah" ? "ayah" : "surah")}
+               className={cn(
+                 "relative h-6 w-11 rounded-full transition-colors duration-300",
+                 playbackMode === "surah" ? "bg-primary" : "bg-muted"
+               )}
+             >
+               <div className={cn(
+                 "absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300 shadow-sm",
+                 playbackMode === "surah" ? "translate-x-5" : "translate-x-0"
+               )} />
+             </button>
+           </div>
+           <p className="text-[10px] text-muted-foreground/40 font-medium italic">Read Study Learn...</p>
         </div>
       </div>
     </div>

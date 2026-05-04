@@ -60,14 +60,10 @@ export default function AppsPage() {
 
       {/* Content Header */}
       <div className="max-w-4xl w-full text-center space-y-8 z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary animate-in fade-in slide-in-from-top-4 duration-1000">
-          <Sparkles className="h-4 w-4 fill-current" />
-          <span className="text-xs font-black uppercase tracking-wider">Something New is Brewing</span>
-        </div>
+        
 
         <div className="space-y-4">
           <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tight leading-[1.1] animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            Great things are <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">
               Upcoming
             </span>
@@ -85,20 +81,7 @@ export default function AppsPage() {
           <CountdownItem value={timeLeft.seconds} label="Seconds" />
         </div>
 
-        {/* Action Area */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500">
-          <div className="relative group w-full sm:w-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email for updates" 
-              className="h-14 w-full sm:w-80 px-6 rounded-2xl bg-[#1A1A1A] border border-[#2A2A2A] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/30"
-            />
-          </div>
-          <Button size="lg" className="h-14 px-10 rounded-2xl bg-primary text-white font-bold hover:bg-primary/90 shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 group">
-            Notify Me
-            <Bell className="ml-2 h-4 w-4 fill-current group-hover:rotate-12 transition-transform" />
-          </Button>
-        </div>
+       
       </div>
     </div>
   );

@@ -13,11 +13,11 @@ function SurahCard({ surah }: SurahCardProps) {
   return (
     <Link
       href={`/surah/${surah.sura_no}`}
-      className="flex items-center gap-5 p-5 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] transition-all duration-300 hover:border-primary/40 hover:bg-[#111111] hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5 group relative overflow-hidden"
+      className="flex items-center gap-5 p-5 rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:bg-muted hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5 group relative overflow-hidden"
     >
       {/* Diamond Number Badge */}
       <div className="relative flex h-12 w-12 shrink-0 items-center justify-center">
-        <div className="absolute inset-0 rotate-45 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] group-hover:border-primary/30 group-hover:rotate-[135deg] transition-all duration-500" />
+        <div className="absolute inset-0 rotate-45 rounded-xl bg-muted border border-border group-hover:border-primary/30 group-hover:rotate-[135deg] transition-all duration-500" />
         <span className="relative text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
           {surah.sura_no}
         </span>
@@ -67,7 +67,7 @@ export function SurahGrid({ surahs, searchQuery }: SurahGridProps) {
         </h2>
 
         {/* Tab Switcher */}
-        <div className="flex p-1.5 bg-[#111111] rounded-2xl border border-[#222222]">
+        <div className="flex p-1.5 bg-muted/50 rounded-2xl border border-border">
           {["surah", "juz", "page"].map((tab) => (
             <button
               key={tab}
@@ -75,7 +75,7 @@ export function SurahGrid({ surahs, searchQuery }: SurahGridProps) {
               className={cn(
                 "px-8 py-2.5 text-sm font-bold capitalize rounded-xl transition-all duration-300",
                 activeTab === tab
-                  ? "bg-[#1A1A1A] text-foreground shadow-xl ring-1 ring-white/5"
+                  ? "bg-card text-foreground shadow-xl ring-1 ring-black/5 dark:ring-white/5"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >

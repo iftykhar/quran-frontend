@@ -67,9 +67,13 @@ export function HeroSection({ onSearch }: HeroSectionProps) {
   return (
     <section className="relative pt-20 pb-16 px-6 lg:px-8 flex flex-col items-center text-center overflow-hidden">
       {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-10 pointer-events-none text-primary">
-        <div className="absolute top-10 left-10 h-32 w-32 bg-current blur-3xl rounded-full" />
-        <div className="absolute bottom-10 right-10 h-32 w-32 bg-current blur-3xl rounded-full" />
+      <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
+        {/* Soft Radial Gradient for Light Mode */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,oklch(68.94%_0.1218_225.48/0.05),transparent_70%)] dark:opacity-0" />
+        
+        {/* Decorative Blur Orbs */}
+        <div className="absolute top-10 left-10 h-64 w-64 bg-primary/10 blur-[100px] rounded-full opacity-50" />
+        <div className="absolute bottom-10 right-10 h-64 w-64 bg-secondary/10 blur-[100px] rounded-full opacity-50" />
       </div>
 
       {/* Main Title */}
@@ -86,9 +90,9 @@ export function HeroSection({ onSearch }: HeroSectionProps) {
           placeholder="What do you want to read?"
           value={searchValue}
           onChange={handleChange}
-          className="w-full h-16 pl-16 pr-24 bg-[#111111] border border-[#222222] rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder:text-muted-foreground/30 shadow-2xl"
+          className="w-full h-16 pl-16 pr-24 bg-card border border-border rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder:text-muted-foreground/30 shadow-2xl"
         />
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 px-3 py-1 bg-[#1A1A1A] rounded-lg border border-[#333333] text-xs text-muted-foreground font-mono">
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 px-3 py-1 bg-muted rounded-lg border border-border text-xs text-muted-foreground font-mono">
           Ctrl+k
         </div>
       </div>
@@ -99,7 +103,7 @@ export function HeroSection({ onSearch }: HeroSectionProps) {
           <Link
             key={surah.id}
             href={`/surah/${surah.id}`}
-            className="px-8 py-2.5 rounded-full bg-[#111111] border border-[#222222] text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-[#1A1A1A] transition-all"
+            className="px-8 py-2.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-muted transition-all"
           >
             {surah.name}
           </Link>
