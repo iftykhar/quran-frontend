@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import { SurahReader } from "@/components/shared/surah-reader";
 
-const API_BASE_URL = "http://localhost:5000/api/v1/quran";
+// const API_BASE_URL = "http://localhost:5000/api/v1/quran";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/quran` : "http://localhost:5000/api/v1/quran";
 
 export async function generateStaticParams() {
   try {

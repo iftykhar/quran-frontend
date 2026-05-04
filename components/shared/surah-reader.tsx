@@ -38,7 +38,7 @@ export function SurahReader({ initialData }: SurahReaderProps) {
       </div>
 
       {/* Ayah List */}
-      <div className="space-y-6">
+      <div className="flex flex-col gap-4">
         {ayahs.map((ayah) => (
           <AyahCard 
             key={ayah.ayah_no} 

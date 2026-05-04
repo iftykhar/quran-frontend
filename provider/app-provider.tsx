@@ -14,6 +14,10 @@ interface SettingsContextType {
   setArabicFontSize: (size: number) => void;
   setTranslationFontSize: (size: number) => void;
   setActiveFontFamily: (family: string) => void;
+  playingAyahKey: string | null;
+  isPlaying: boolean;
+  playAyah: (key: string, url: string) => void;
+  stopAyah: () => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -36,6 +40,57 @@ export default function AppProvider({
   const [arabicFontSize, setArabicFontSize] = useState(24);
   const [translationFontSize, setTranslationFontSize] = useState(16);
   const [activeFontFamily, setActiveFontFamily] = useState("KFGQPC Uthman Taha Naskh");
+
+  // Global Audio State
+  const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  const stopAyah = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setIsPlaying(false);
+    setPlayingAyahKey(null);
+  };
+
+  const playAyah = (key: string, url: string) => {
+    if (playingAyahKey === key) {
+      if (isPlaying) {
+        audioRef.current?.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current?.play();
+        setIsPlaying(true);
+      }
+      return;
+    }
+
+    // Stop current audio if any
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    setPlayingAyahKey(key);
+    setIsPlaying(true);
+
+    audio.play().catch((err) => {
+      console.error("Audio play failed:", err);
+      setIsPlaying(false);
+      setPlayingAyahKey(null);
+    });
+
+    audio.onended = () => {
+      setIsPlaying(false);
+      setPlayingAyahKey(null);
+    };
+
+    audio.onpause = () => setIsPlaying(false);
+    audio.onplay = () => setIsPlaying(true);
+  };
 
   // Load from localStorage
   useEffect(() => {
@@ -70,6 +125,10 @@ export default function AppProvider({
           setArabicFontSize,
           setTranslationFontSize,
           setActiveFontFamily,
+          playingAyahKey,
+          isPlaying,
+          playAyah,
+          stopAyah,
         }}
       >
         <div className="flex min-h-screen bg-background">

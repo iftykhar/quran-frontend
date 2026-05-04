@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Ayah } from "@/types/quran";
-import { Play, Pause, Bookmark, Share2, Copy } from "lucide-react";
+import { Play, Pause, Bookmark, Copy, MoreHorizontal, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getAyahAudioUrl } from "@/lib/utils";
+import { useSettings } from "@/provider/app-provider";
 
 interface AyahCardProps {
   ayah: Ayah;
@@ -16,78 +17,117 @@ interface AyahCardProps {
 }
 
 export function AyahCard({ ayah, settings }: AyahCardProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
+  const { playingAyahKey, isPlaying, playAyah } = useSettings();
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const ayahKey = `${ayah.sura_no}:${ayah.ayah_no}`;
+  const isCurrentPlaying = playingAyahKey === ayahKey;
+  
+  const handlePlay = async () => {
+    if (isCurrentPlaying && isPlaying) {
+      playAyah(ayahKey, ""); // This will toggle pause in AppProvider
+      return;
     }
-    setIsPlaying(!isPlaying);
-  };
 
-  const onEnded = () => {
-    setIsPlaying(false);
+    setIsLoading(true);
+    const audioUrl = getAyahAudioUrl(ayah.sura_no, ayah.ayah_no);
+    
+    // Test if audio exists, else fallback
+    try {
+      const response = await fetch(audioUrl, { method: "HEAD" });
+      if (response.ok) {
+        playAyah(ayahKey, audioUrl);
+      } else {
+        console.warn(`EveryAyah audio failed for ${ayahKey}, falling back to database link.`);
+        playAyah(ayahKey, ayah.audio_url);
+      }
+    } catch (error) {
+      console.error("Audio fetch error:", error);
+      playAyah(ayahKey, ayah.audio_url);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="group relative p-8 rounded-3xl bg-card/50 border border-border/50 transition-all duration-300 hover:bg-card hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5">
-      <audio 
-        ref={audioRef} 
-        src={ayah.audio_url} 
-        onEnded={onEnded}
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
-      />
-      
-      {/* Ayah Meta & Actions */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-sm">
+    <div className="group flex gap-8 p-8 rounded-3xl bg-card/30 border border-border/40 transition-all duration-300 hover:bg-card/50 hover:border-primary/20">
+      {/* Left Column: Actions */}
+      <div className="flex flex-col items-center gap-4 w-12 pt-2">
+        <span className="text-primary font-bold text-lg whitespace-nowrap">
+          {ayah.sura_no}:{ayah.ayah_no}
+        </span>
+        
+        <div className="flex flex-col gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={cn(
+              "h-10 w-10 rounded-full transition-all",
+              isCurrentPlaying ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+            )}
+            onClick={handlePlay}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isCurrentPlaying && isPlaying ? (
+              <Pause className="h-5 w-5 fill-current" />
+            ) : (
+              <Play className="h-5 w-5 fill-current" />
+            )}
+          </Button>
+          
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/5">
+            <Bookmark className="h-5 w-5" />
+          </Button>
+          
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/5">
+            <Copy className="h-5 w-5" />
+          </Button>
+          
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/5">
+            <MoreHorizontal className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Right Column: Content */}
+      <div className="flex-1 space-y-8">
+        {/* Arabic Text */}
+        <div 
+          className="text-right leading-[2.5] mb-8 text-foreground"
+          style={{ 
+            fontSize: `${settings.arabicFontSize}px`,
+            fontFamily: settings.activeFontFamily
+          }}
+        >
+          {ayah.arabic_text}
+          <span className="inline-flex items-center justify-center w-10 h-10 ml-4 rounded-full border border-primary/30 text-sm font-bold text-primary font-sans align-middle">
             {ayah.ayah_no}
-          </div>
-          <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/10" onClick={togglePlay}>
-              {isPlaying ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current" />}
-            </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/10">
-              <Bookmark className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/10">
-              <Copy className="h-4 w-4" />
-            </Button>
-          </div>
+          </span>
         </div>
-      </div>
 
-      {/* Arabic Text */}
-      <div 
-        className="text-right leading-relaxed mb-8"
-        style={{ 
-          fontSize: `${settings.arabicFontSize}px`,
-          fontFamily: settings.activeFontFamily
-        }}
-      >
-        {ayah.arabic_text}
-      </div>
+        {/* Translations */}
+        <div className="space-y-6">
+          <div className="space-y-1">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">SAHEEH INTERNATIONAL</p>
+            <div 
+              className="text-foreground/90 leading-relaxed"
+              style={{ fontSize: `${settings.translationFontSize}px` }}
+            >
+              {ayah.english_text}
+            </div>
+          </div>
 
-      {/* Translations */}
-      <div className="space-y-4 pt-6 border-t border-border/50">
-        <div 
-          className="text-foreground/90 font-medium leading-relaxed font-bengali"
-          style={{ fontSize: `${settings.translationFontSize}px` }}
-        >
-          {ayah.bengali_text}
-        </div>
-        <div 
-          className="text-muted-foreground leading-relaxed"
-          style={{ fontSize: `${settings.translationFontSize - 2}px` }}
-        >
-          {ayah.english_text}
+          <div className="space-y-1">
+             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Bengali</p>
+            <div 
+              className="text-foreground/90 font-medium leading-relaxed font-bengali"
+              style={{ fontSize: `${settings.translationFontSize}px` }}
+            >
+              {ayah.bengali_text}
+            </div>
+          </div>
         </div>
       </div>
     </div>
