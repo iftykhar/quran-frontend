@@ -114,7 +114,7 @@
   --accent: oklch(0.96 0.01 225);
   --accent-foreground: oklch(0.145 0 0);
 
-  --primary: oklch(68.94% 0.1218 225.48);
+  --primary: oklch(82.985% 0.1374 174.956);
   --primary-foreground: oklch(1 0 0);
 
   --secondary: oklch(68.58% 0.1458 161.02);
@@ -122,7 +122,7 @@
 
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(68.94% 0.1218 225.48);
+  --ring: oklch(76.923% 0.12563 157.359);
 }
 
 @layer base {
