@@ -1,11 +1,12 @@
 "use client";
 
-import { getSurahs } from "@/lib/api";
 import { HeroSection } from "@/components/home/hero-section";
 import { SurahGrid } from "@/components/home/surah-grid";
+import { getSurahs } from "@/lib/api";
+// import { HeroSection } from "@/components/home/hero-section";
+// import { SurahGrid } from "@/components/home/surah-grid";
 import React from "react";
 
-// Use client side state for search filtering
 export default function Home() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [surahs, setSurahs] = React.useState<any[]>([]);

@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { JuzReaderContainer } from "@/components/shared/juz-reader-container";
+import { Suspense } from "react"; 
+import { JuzReaderContainer } from "@/components/ayah/juz-reader-container";
 
 export async function generateStaticParams() {
   return Array.from({ length: 30 }, (_, i) => ({

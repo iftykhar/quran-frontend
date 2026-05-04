@@ -24,7 +24,7 @@ export function SettingsPanel() {
     setActiveFontFamily,
   } = useSettings();
 
-  const [activeTab, setActiveTab] = useState<"translation" | "reading">("translation");
+  // const [activeTab, setActiveTab] = useState<"translation" | "reading">("translation");
 
   const fontOptions = [
     { label: "KFGQ", value: "KFGQPC Uthman Taha Naskh" },
@@ -59,7 +59,7 @@ export function SettingsPanel() {
 
         <div className="p-6 space-y-8">
           {/* Tab Switcher */}
-          <div className="flex p-1 bg-[#111111] rounded-2xl border border-[#1F1F1F]">
+          {/* <div className="flex p-1 bg-[#111111] rounded-2xl border border-[#1F1F1F]">
             {["translation", "reading"].map((tab) => (
               <button
                 key={tab}
@@ -74,11 +74,11 @@ export function SettingsPanel() {
                 {tab}
               </button>
             ))}
-          </div>
+          </div> */}
 
           <Accordion.Root type="multiple" defaultValue={["font-settings"]} className="space-y-4">
             {/* Reading Settings */}
-            <Accordion.Item value="reading-settings" className="border-b border-[#1F1F1F] pb-4">
+            {/* <Accordion.Item value="reading-settings" className="border-b border-[#1F1F1F] pb-4">
               <Accordion.Header>
                 <Accordion.Trigger className="flex w-full items-center justify-between py-4 group">
                   <div className="flex items-center gap-4">
@@ -93,7 +93,7 @@ export function SettingsPanel() {
               <Accordion.Content className="pt-2 pb-4 text-sm text-muted-foreground/60">
                 Additional reading preferences like word-by-word and auto-scroll will appear here.
               </Accordion.Content>
-            </Accordion.Item>
+            </Accordion.Item> */}
 
             {/* Font Settings */}
             <Accordion.Item value="font-settings" className="border-b border-[#1F1F1F] pb-4">

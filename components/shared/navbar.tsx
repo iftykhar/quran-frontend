@@ -13,7 +13,7 @@ const navigationItems = [
   // { label: "Ramadan 2026", href: "/ramadan" },
 ];
 
-import { SettingsPanel } from "./settings-panel";
+import { SettingsPanel } from "../settings/settings-panel";
 
 export function Navbar() {
   const [theme, setTheme] = React.useState<"dark" | "light">("dark");

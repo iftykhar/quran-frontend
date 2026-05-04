@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useSettings } from "@/provider/app-provider";
-import { AyahCard } from "@/components/shared/ayah-card";
+import { AyahCard } from "@/components/surah/ayah-card";
 import { Bookmark, Search } from "lucide-react";
 import Link from "next/link";
 

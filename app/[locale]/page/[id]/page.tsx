@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { PageReaderContainer } from "@/components/shared/page-reader-container";
+import { Suspense } from "react";
+import { PageReaderContainer } from "@/components/ayah/page-reader-container";
 
 export async function generateStaticParams() {
   return Array.from({ length: 604 }, (_, i) => ({

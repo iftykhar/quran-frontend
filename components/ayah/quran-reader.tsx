@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Ayah, Surah } from "@/types/quran";
-import { AyahCard } from "@/components/shared/ayah-card";
+import { AyahCard } from "@/components/surah/ayah-card";
 import { useSettings } from "@/provider/app-provider";
 import { getSurahById, getJuzById, getPageById, SurahData, JuzData, PageData } from "@/lib/api";
 import { cn } from "@/lib/utils";

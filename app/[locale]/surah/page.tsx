@@ -1,5 +1,4 @@
-import React from 'react';
-import { SurahExplorer } from '@/components/shared/surah-explorer';
+import { SurahExplorer } from '@/components/surah/surah-explorer';
 
 export default function SurahPage() {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { JumpToAyahModal } from "./jump-to-ayah-modal";
-import { SearchModal } from "./search-modal";
+import { JumpToAyahModal } from "../ayah/jump-to-ayah-modal";
+import { SearchModal } from "../ayah/search-modal";
 
 export function GlobalModals() {
   const [isJumpOpen, setIsJumpOpen] = useState(false);

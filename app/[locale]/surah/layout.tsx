@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SurahSidebar } from "@/components/shared/surah-sidebar";
+import { SurahSidebar } from "@/components/surah/surah-sidebar";
 
 export default function SurahLayout({
   children,

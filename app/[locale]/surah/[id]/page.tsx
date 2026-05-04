@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { getSurahs } from "@/lib/api";
-import { SurahReaderContainer } from "@/components/shared/surah-reader-container";
+import { SurahReaderContainer } from "@/components/surah/surah-reader-container";
 
 export async function generateStaticParams() {
   const surahs = await getSurahs();
@@ -11,7 +11,7 @@ export async function generateStaticParams() {
 
 export default async function SurahPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  
+
   return (
     <Suspense fallback={<div className="p-8 text-center">Loading Surah...</div>}>
       <SurahReaderContainer id={id} />
