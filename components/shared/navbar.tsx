@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Settings, Moon, Sun, ChevronDown } from "lucide-react";
+import { Settings, Moon, Sun, ChevronDown, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +20,23 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 h-20 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="flex h-full items-center justify-between px-8">
-        <div className="flex items-center gap-10">
+      <div className="flex h-full items-center justify-between px-6 lg:px-8">
+        <div className="flex items-center gap-4 lg:gap-10">
+          {/* Hamburger for Sidebar */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden h-10 w-10 rounded-xl bg-muted/50 text-muted-foreground hover:text-primary"
+            onClick={() => {
+              // We need a way to trigger the sidebar. 
+              // Since it's a separate component, I'll use a custom event for now 
+              // or just assume the user will implement a global state.
+              window.dispatchEvent(new CustomEvent('toggle-sidebar'));
+            }}
+          >
+            <Menu className="h-6 w-6" />
+          </Button>
+
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
                <svg

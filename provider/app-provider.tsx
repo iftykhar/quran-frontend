@@ -133,7 +133,7 @@ export default function AppProvider({
       >
         <div className="flex min-h-screen bg-background">
           <IconSidebar />
-          <div className="flex-1 pl-20 flex flex-col">
+          <div className="flex-1 lg:pl-20 pb-16 lg:pb-0 flex flex-col">
             {!hideNavAndFooter.includes(pathname) && <Navbar />}
             <main className="flex-1">
               {children}

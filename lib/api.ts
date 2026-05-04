@@ -45,3 +45,16 @@ export async function getSurahById(id: string, page: number = 1, limit: number =
     return null;
   }
 }
+
+/**
+ * Fetches the list of all 30 Juz.
+ */
+export async function getJuzList(): Promise<any[]> {
+  try {
+    const response = await api.get<ApiResponse<any[]>>("/juz");
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching juz list:", error);
+    return [];
+  }
+}
