@@ -6,8 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Surah } from "@/types/quran";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { getSurahs, getJuzList } from "@/lib/api";
+import { useParams, usePathname } from "next/navigation";
+import { getSurahs, getJuzList, getPageList } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface SidebarItemProps {
@@ -99,7 +99,13 @@ export function SurahSidebar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const params = useParams();
-  const currentSurahId = params.id ? parseInt(params.id as string) : null;
+  const pathname = usePathname();
+  
+  // Extract ID and type from URL
+  const currentId = params.id ? parseInt(params.id as string) : null;
+  const isSurahRoute = pathname.includes("/surah/");
+  const isJuzRoute = pathname.includes("/juz/");
+  const isPageRoute = pathname.includes("/page/");
 
   const { data: surahs, isLoading: isLoadingSurahs } = useQuery({
     queryKey: ["surahs"],
@@ -112,11 +118,18 @@ export function SurahSidebar() {
     enabled: activeTab === "juz",
   });
 
-  // Pages are currently a virtual list 1-604
-  const pages = Array.from({ length: 604 }, (_, i) => ({
-    page_no: i + 1,
-    title: `Page ${i + 1}`,
-  }));
+  const { data: pageList, isLoading: isLoadingPages } = useQuery({
+    queryKey: ["pageList"],
+    queryFn: getPageList,
+    enabled: activeTab === "page",
+  });
+
+  // Automatically switch tab based on current route on mount
+  useEffect(() => {
+    if (isJuzRoute) setActiveTab("juz");
+    else if (isPageRoute) setActiveTab("page");
+    else setActiveTab("surah");
+  }, [isJuzRoute, isPageRoute]);
 
   const filteredItems = React.useMemo(() => {
     const query = searchQuery.toLowerCase();
@@ -132,8 +145,14 @@ export function SurahSidebar() {
         j.first_surah_name.toLowerCase().includes(query)
       ) || [];
     }
-    return pages.filter(p => p.title.toLowerCase().includes(query));
-  }, [activeTab, searchQuery, surahs, juzList, pages]);
+    if (activeTab === "page") {
+      return pageList?.filter(p =>
+        p.page_no.toString().includes(query) ||
+        p.surahs.some(s => s.toLowerCase().includes(query))
+      ) || [];
+    }
+    return [];
+  }, [activeTab, searchQuery, surahs, juzList, pageList]);
 
   useEffect(() => {
     const handleToggle = () => setIsOpen(prev => !prev);
@@ -208,7 +227,7 @@ export function SurahSidebar() {
 
         {/* List Content */}
         <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-3 custom-scrollbar">
-          {isLoadingSurahs || (activeTab === "juz" && isLoadingJuz) ? (
+          {isLoadingSurahs || (activeTab === "juz" && isLoadingJuz) || (activeTab === "page" && isLoadingPages) ? (
             Array.from({ length: 8 }).map((_, i) => <SidebarSkeleton key={i} />)
           ) : (
             filteredItems.map((item: any) => {
@@ -221,7 +240,7 @@ export function SurahSidebar() {
                     title={surah.eng_name}
                     subtitle={surah.meaning}
                     arabicName={surah.sura_name}
-                    isActive={currentSurahId === surah.sura_no}
+                    isActive={isSurahRoute && currentId === surah.sura_no}
                     href={`/surah/${surah.sura_no}`}
                     onClick={() => setIsOpen(false)}
                   />
@@ -234,7 +253,7 @@ export function SurahSidebar() {
                     number={item.juz_no}
                     title={`Juz ${item.juz_no}`}
                     subtitle={`${item.first_surah_name} & More • ${item.surah_count} Surahs`}
-                    isActive={false} // Handle Juz active state if needed
+                    isActive={isJuzRoute && currentId === item.juz_no}
                     href={`/juz/${item.juz_no}`}
                     onClick={() => setIsOpen(false)}
                   />
@@ -245,8 +264,8 @@ export function SurahSidebar() {
                   key={`page-${item.page_no}`}
                   number={item.page_no}
                   title={`Page ${item.page_no}`}
-                  subtitle="Quran Madani Mushaf"
-                  isActive={false}
+                  subtitle={item.surahs?.join(' \u2022 ') || 'Quran Madani Mushaf'}
+                  isActive={isPageRoute && currentId === item.page_no}
                   href={`/page/${item.page_no}`}
                   onClick={() => setIsOpen(false)}
                 />

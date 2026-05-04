@@ -6,6 +6,8 @@ import { AyahCard } from "@/components/surah/ayah-card";
 import { useSettings } from "@/provider/app-provider";
 import { getSurahById, getJuzById, getPageById, SurahData, JuzData, PageData } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type ReaderType = "surah" | "juz" | "page";
 
@@ -74,6 +76,8 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
     setHasMore(initialData.ayahs.length >= 20);
   }, [id, initialData]);
 
+  const currentPageNo = parseInt(id, 10);
+
   const renderHeader = () => {
     if (type === "surah") {
       const { surah } = initialData as SurahData;
@@ -113,6 +117,9 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       );
     }
 
+    // Page type - show surah names and prev/next navigation
+    const pageData = initialData as PageData;
+    const surahNames = pageData.surahs?.map(s => s.eng_name).join(' \u2022 ') || '';
     return (
       <div className="mb-14 text-center space-y-6">
         <div className="inline-block px-8 py-3 rounded-full bg-[#132313] text-primary font-bold text-sm tracking-wide border border-primary/20 shadow-lg">
@@ -121,8 +128,29 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
         <div className="space-y-2">
           <h1 className="font-bold text-4xl text-foreground">Page {id}</h1>
           <p className="text-muted-foreground text-sm font-medium tracking-wide uppercase">
-            Mushaf Al-Madina
+            {surahNames || 'Mushaf Al-Madina'}
           </p>
+        </div>
+        {/* Prev / Next Page Navigation */}
+        <div className="flex items-center justify-center gap-4 pt-2">
+          {currentPageNo > 1 && (
+            <Link
+              href={`/page/${currentPageNo - 1}`}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Page {currentPageNo - 1}
+            </Link>
+          )}
+          {currentPageNo < 604 && (
+            <Link
+              href={`/page/${currentPageNo + 1}`}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+            >
+              Page {currentPageNo + 1}
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          )}
         </div>
       </div>
     );
@@ -141,6 +169,30 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
           />
         ))}
       </div>
+
+      {/* Bottom navigation for page type */}
+      {type === "page" && (
+        <div className="flex items-center justify-between mt-10 pt-8 border-t border-[#2A2A2A]">
+          {currentPageNo > 1 ? (
+            <Link
+              href={`/page/${currentPageNo - 1}`}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] text-sm font-bold text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-[#1E1E1E] transition-all duration-300"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous Page
+            </Link>
+          ) : <div />}
+          {currentPageNo < 604 ? (
+            <Link
+              href={`/page/${currentPageNo + 1}`}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] text-sm font-bold text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-[#1E1E1E] transition-all duration-300"
+            >
+              Next Page
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          ) : <div />}
+        </div>
+      )}
 
       <div ref={observerTarget} className="h-20 flex items-center justify-center">
         {isLoadingMore && (

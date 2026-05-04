@@ -105,6 +105,9 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+  button {
+    @apply cursor-pointer;
+  }
   .container {
     @apply mx-auto px-4!;
   }

@@ -58,42 +58,10 @@ export function SettingsPanel() {
         </SheetHeader>
 
         <div className="p-6 space-y-8">
-          {/* Tab Switcher */}
-          {/* <div className="flex p-1 bg-[#111111] rounded-2xl border border-[#1F1F1F]">
-            {["translation", "reading"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab as any)}
-                className={cn(
-                  "flex-1 py-2.5 text-sm font-bold capitalize rounded-xl transition-all duration-300",
-                  activeTab === tab
-                    ? "bg-[#1F1F1F] text-foreground shadow-xl ring-1 ring-white/5"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {tab}
-              </button>
-            ))}
-          </div> */}
+         
 
           <Accordion.Root type="multiple" defaultValue={["font-settings"]} className="space-y-4">
-            {/* Reading Settings */}
-            {/* <Accordion.Item value="reading-settings" className="border-b border-[#1F1F1F] pb-4">
-              <Accordion.Header>
-                <Accordion.Trigger className="flex w-full items-center justify-between py-4 group">
-                  <div className="flex items-center gap-4">
-                    <div className="h-8 w-8 rounded-lg bg-[#111111] flex items-center justify-center group-data-[state=open]:text-primary transition-colors">
-                      <BookOpen className="h-4 w-4" />
-                    </div>
-                    <span className="text-sm font-bold group-data-[state=open]:text-primary transition-colors">Reading Settings</span>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-data-[state=open]:rotate-90" />
-                </Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Content className="pt-2 pb-4 text-sm text-muted-foreground/60">
-                Additional reading preferences like word-by-word and auto-scroll will appear here.
-              </Accordion.Content>
-            </Accordion.Item> */}
+            
 
             {/* Font Settings */}
             <Accordion.Item value="font-settings" className="border-b border-[#1F1F1F] pb-4">

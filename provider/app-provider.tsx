@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import { Navbar } from "@/components/shared/navbar";
 import { IconSidebar } from "@/components/shared/icon-sidebar";
+import { AudioPlayer } from "@/components/shared/audio-player";
+import { cn } from "@/lib/utils";
 
 interface SettingsContextType {
   arabicFontSize: number;
@@ -22,6 +24,7 @@ interface SettingsContextType {
   addBookmark: (ayah: any) => void;
   removeBookmark: (key: string) => void;
   isBookmarked: (key: string) => boolean;
+  audioRef: React.RefObject<HTMLAudioElement | null>;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -158,16 +161,18 @@ export default function AppProvider({
           addBookmark,
           removeBookmark,
           isBookmarked,
+          audioRef,
         }}
       >
         <div className="flex min-h-screen bg-background">
           <IconSidebar />
           <div className="flex-1 lg:pl-20 pb-16 lg:pb-0 flex flex-col">
             {!hideNavAndFooter.includes(pathname) && <Navbar />}
-            <main className="flex-1">
+            <main className={cn("flex-1", playingAyahKey && "pb-20")}>
               {children}
             </main>
           </div>
+          <AudioPlayer />
         </div>
       </SettingsContext.Provider>
     </QueryClientProvider>

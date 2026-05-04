@@ -31,7 +31,13 @@ export interface JuzData {
 
 export interface PageData {
   page_no: number;
+  surahs: { sura_no: number; name: string; eng_name: string }[];
   ayahs: Ayah[];
+}
+
+export interface PageListItem {
+  page_no: number;
+  surahs: string[];
 }
 
 /**
@@ -121,6 +127,19 @@ export async function getJuzList(): Promise<any[]> {
     return response.data.data;
   } catch (error) {
     console.error("Error fetching juz list:", error);
+    return [];
+  }
+}
+
+/**
+ * Fetches the list of all 604 pages with their surah names.
+ */
+export async function getPageList(): Promise<PageListItem[]> {
+  try {
+    const response = await api.get<ApiResponse<PageListItem[]>>("/pages");
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching page list:", error);
     return [];
   }
 }
