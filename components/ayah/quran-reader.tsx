@@ -25,29 +25,22 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
     playFullSurah, 
     playAyah,
     playbackMode,
-    playingAyahKey,
-    setPlaybackMode
+    setPlaybackMode,
+    playingAyahKey 
   } = useSettings();
-
-  const [ayahs, setAyahs] = useState<Ayah[]>(() => {
-    const base = initialData.ayahs;
-    const bis = (initialData as any).bismillah;
-    if (bis && !base.some((a: any) => a.ayah_no === 0)) {
-      return [bis, ...base];
-    }
-    return base;
-  });
-
+  const [ayahs, setAyahs] = useState<Ayah[]>(initialData.ayahs);
+  const [bismillah, setBismillah] = useState<Ayah | null>((initialData as any).bismillah || null);
   const [page, setPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(initialData.ayahs.length >= 20);
   const observerTarget = useRef<HTMLDivElement>(null);
 
+  // ... (fetcher and other hooks) ...
+
   const handlePlayFullSurah = () => {
-    const bis = ayahs.find(a => a.ayah_no === 0);
-    if (bis) {
+    if (bismillah) {
       // Start with bismillah (ayah 0)
-      playAyah(`${bis.sura_no}:0`, bis.audio_url || "");
+      playAyah(`${bismillah.sura_no}:0`, bismillah.audio_url || "");
       setPlaybackMode("surah");
     } else {
       // Regular start from ayah 1
@@ -92,6 +85,8 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       const a = nextAyahId.toString().padStart(3, '0');
       const url = `https://everyayah.com/data/Mishary_Rashid_Alafasy_24kbps/${s}${a}.mp3`;
       
+      // We only play if the surah hasn't ended (this is a simple check, better to check total_ayat)
+      // For now, if the fetch fails or we run out of ayahs, it will just stop
       playAyah(nextKey, url);
     };
 
@@ -109,6 +104,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       }
     }
   }, [playingAyahKey, playbackMode]);
+
 
   const loadMoreAyahs = useCallback(async () => {
     if (isLoadingMore || !hasMore) return;
@@ -151,11 +147,13 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
     setPage(1);
     setHasMore(initialData.ayahs.length >= 20);
 
+    // Handle Jump to Ayah from Hash
     const handleInitialJump = async () => {
       const hash = window.location.hash;
       if (hash.startsWith("#ayah-")) {
         const ayahNo = parseInt(hash.replace("#ayah-", ""));
         
+        // If the ayah is beyond current loaded set
         if (ayahNo > initialData.ayahs.length) {
           setIsLoadingMore(true);
           const targetPage = Math.ceil(ayahNo / 20);
@@ -175,11 +173,13 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
           }
           setIsLoadingMore(false);
           
+          // Wait for DOM to update then scroll
           setTimeout(() => {
             const el = document.getElementById(`ayah-${ayahNo}`);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }, 500);
         } else {
+          // It's in the first page, just scroll
           setTimeout(() => {
             const el = document.getElementById(`ayah-${ayahNo}`);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -191,6 +191,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
     handleInitialJump();
   }, [id, initialData, fetcher]);
 
+  // Handle Hash Changes (Universal Observer)
   useEffect(() => {
     const handleJumpAction = async () => {
       const hash = window.location.hash;
@@ -200,8 +201,10 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       const el = document.getElementById(`ayah-${ayahNo}`);
 
       if (el) {
+        // Element exists, scroll to it
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else if (hasMore) {
+        // Element doesn't exist, calculate page and fetch
         const targetPage = Math.ceil(ayahNo / 20);
         if (targetPage > page) {
           setIsLoadingMore(true);
@@ -218,6 +221,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
           }
           setIsLoadingMore(false);
           
+          // Retry scrolling after state update
           setTimeout(() => {
             const newEl = document.getElementById(`ayah-${ayahNo}`);
             if (newEl) newEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -226,7 +230,11 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       }
     };
 
+    // Listen for both hashchange events and manual triggers
     window.addEventListener("hashchange", handleJumpAction);
+    
+    // Periodically check hash for a few seconds after a page change 
+    // to catch Next.js client-side navigations that might miss the event
     const interval = setInterval(handleJumpAction, 1000);
     setTimeout(() => clearInterval(interval), 5000);
 
@@ -234,7 +242,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       window.removeEventListener("hashchange", handleJumpAction);
       clearInterval(interval);
     };
-  }, [ayahs, page, hasMore, fetcher, id]);
+  }, [ayahs, page, hasMore, fetcher, id]); // Added id as dependency
 
   const currentPageNo = parseInt(id, 10);
 
@@ -264,6 +272,14 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
             <p className="text-xl font-bold text-muted-foreground uppercase tracking-[0.2em]">{surah?.eng_name}</p>
           </div>
           
+          {/* Bismillah Preamble */}
+          {bismillah && (
+            <div className="pt-12 pb-6">
+              <p className="font-quran text-4xl text-foreground/90 text-center tracking-wide">
+                {bismillah.arabic_text}
+              </p>
+            </div>
+          )}
           <div className="flex items-center justify-center gap-4 text-[#8BA1B3] text-xs font-bold uppercase tracking-widest">
             <span>{surah?.revelation_place}</span>
             <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
@@ -292,6 +308,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
       );
     }
 
+    // Page type - show surah names and prev/next navigation
     const pageData = initialData as PageData;
     const surahNames = pageData.surahs?.map(s => s.eng_name).join(' \u2022 ') || '';
     return (
@@ -305,6 +322,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
             {surahNames || 'Mushaf Al-Madina'}
           </p>
         </div>
+        {/* Prev / Next Page Navigation */}
         <div className="flex items-center justify-center gap-4 pt-2">
           {currentPageNo > 1 && (
             <Link
@@ -343,6 +361,7 @@ export function QuranReader({ initialData, id, type }: QuranReaderProps) {
         ))}
       </div>
 
+      {/* Bottom navigation for page type */}
       {type === "page" && (
         <div className="flex items-center justify-between mt-10 pt-8 border-t border-[#2A2A2A]">
           {currentPageNo > 1 ? (
